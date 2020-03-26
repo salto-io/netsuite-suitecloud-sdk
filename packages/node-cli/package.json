@@ -17,7 +17,7 @@
 		"url": "https://github.com/oracle/netsuite-suitecloud-sdk/issues"
 	},
 	"repository": "https://github.com/oracle/netsuite-suitecloud-sdk/tree/master/packages/node-cli",
-	"main": "./src/suitecloud.js",
+	"main": "./index.js",
 	"preferGlobal": true,
 	"sdkDownloadUrl": "https://system.netsuite.com/download/suitecloud-sdk/22.1",
 	"bin": {
