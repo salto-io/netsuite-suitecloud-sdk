@@ -97,8 +97,8 @@ function getProjectDefaultAuthId(projectFolder) {
 	}
 }
 
-async function getAuthIds(sdkPath) {
-	const sdkExecutor = new SdkExecutor(sdkPath);
+async function getAuthIds() {
+	const sdkExecutor = new SdkExecutor();
 	const getAuthListContext = SdkExecutionContext.Builder.forCommand(COMMANDS.MANAGEAUTH.SDK_COMMAND).integration().addFlag(FLAGS.LIST).build();
 
 	const operationResult = await executeWithSpinner({
@@ -114,7 +114,7 @@ async function getAuthIds(sdkPath) {
 
 async function authenticateWithOauth(params, sdkPath, projectFolder, cancelToken, executionEnvironmentContext) {
 	let authId = params.authid;
-	const sdkExecutor = new SdkExecutor(sdkPath, executionEnvironmentContext);
+	const sdkExecutor = new SdkExecutor(executionEnvironmentContext);
 	const contextBuilder = SdkExecutionContext.Builder.forCommand(COMMANDS.AUTHENTICATE.SDK_COMMAND)
 		.integration()
 		.addParam(COMMANDS.AUTHENTICATE.PARAMS.AUTH_ID, authId);
@@ -176,10 +176,10 @@ async function authenticateCi(params, sdkPath, projectFolder, executionEnvironme
 }
 
 /**
- * 
- * @param {String} authid 
- * @param {String} sdkPath 
- * @param {ExecutionEnvironmentContext} executionEnvironmentContext 
+ *
+ * @param {String} authid
+ * @param {String} sdkPath
+ * @param {ExecutionEnvironmentContext} executionEnvironmentContext
  * @returns {SdkOperationResult}
  */
 async function checkIfReauthorizationIsNeeded(authid, sdkPath, executionEnvironmentContext) {
@@ -194,10 +194,10 @@ async function checkIfReauthorizationIsNeeded(authid, sdkPath, executionEnvironm
 }
 
 /**
- * 
- * @param {String} authid 
- * @param {String} sdkPath 
- * @param {ExecutionEnvironmentContext} executionEnvironmentContext 
+ *
+ * @param {String} authid
+ * @param {String} sdkPath
+ * @param {ExecutionEnvironmentContext} executionEnvironmentContext
  * @returns {SdkOperationResult}
  */
 async function refreshAuthorization(authid, sdkPath, executionEnvironmentContext) {

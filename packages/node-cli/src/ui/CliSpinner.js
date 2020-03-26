@@ -6,8 +6,13 @@
 
 const assert = require('assert');
 const Spinner = require('cli-spinner').Spinner;
+const { compareLogLevels, logger } = require('@salto-io/logging');
 
 const SPINNER_STRING = '⠋⠙⠹⠸⠼⠴⠦⠧⠏';
+
+const currentLogLevel = logger.config.minLevel;
+const verbose = currentLogLevel !== 'none'
+	&& compareLogLevels(currentLogLevel, 'debug') >= 0;
 
 module.exports = {
 	async executeWithSpinner(context) {
@@ -20,14 +25,20 @@ module.exports = {
 		const spinner = new Spinner(message);
 		// TODO: set spinner string conditionally based on the terminal cli is executed in
 		// spinner.setSpinnerString(SPINNER_STRING);
-
+		const showSpinner = (verbose || context.verbose) && process.env.NETSUITE_SDF_PATH == null;
 		try {
-			spinner.start();
+			if (showSpinner) {
+				spinner.start();
+			}
 			const result = await promise;
-			spinner.stop(true);
+			if (showSpinner) {
+				spinner.stop(true);
+			}
 			return result;
 		} catch (error) {
-			spinner.stop(true);
+			if (showSpinner) {
+				spinner.stop(true);
+			}
 			throw error;
 		}
 	},

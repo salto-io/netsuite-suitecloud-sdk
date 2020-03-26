@@ -51,7 +51,7 @@ module.exports = class SetupInputHandler extends BaseInputHandler {
 	async getParameters(params) {
 		this._projectInfoService.checkWorkingDirectoryContainsValidProject(this._commandMetadata.name);
 
-		const authIDActionResult = await getAuthIds(this._sdkPath);
+		const authIDActionResult = await getAuthIds();
 		if (!authIDActionResult.isSuccess()) {
 			throw authIDActionResult.errorMessages;
 		}

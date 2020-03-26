@@ -6,31 +6,37 @@
 
 const path = require('path');
 const fs = require('fs');
-const HOME_PATH = require('os').homedir();
+const { SDK_FILENAME, FOLDERS, SDK_VERSION } = require('../../ApplicationConstants');
 
-const ROOT_DIRECTORY = path.dirname(path.resolve(__dirname, '../../'));
-const PACKAGE_FILE = `${ROOT_DIRECTORY}/package.json`;
+const pkgConfig = require('../../../package.json');
 const CONFIG_FILE = './config.json';
-const { FOLDERS } = require('../../ApplicationConstants');
-const { sdkFilename } = require(PACKAGE_FILE);
 
 let CONFIG_FILE_CACHE = null;
 
 class SdkProperties {
 	constructor() {
+		this._commandTimeout = undefined;
 		this._loadCache();
 	}
 
 	getDownloadURL() {
 		// read config.js file if exists or use package.json
-		const configFile = this.configFileExists() ? CONFIG_FILE_CACHE : require(PACKAGE_FILE);
+		const configFile = this.configFileExists() ? CONFIG_FILE_CACHE : pkgConfig;
 		return configFile.sdkDownloadUrl;
 	}
 
+	getSdkBasePath() {
+		return process.env.NETSUITE_SDF_PATH !== undefined
+			? process.env.NETSUITE_SDF_PATH
+			: require('os').homedir();
+	}
+
+	getSdkVersion() {
+		return SDK_VERSION;
+	}
+
 	getSdkFileName() {
-		// read config.js file if exists or use package.json
-		const sdkFileName = this.configFileExists() ? CONFIG_FILE_CACHE.sdkFilename : sdkFilename
-		return sdkFileName;
+		return this.configFileExists() ? CONFIG_FILE_CACHE.sdkFilename : SDK_FILENAME;
 	}
 
 	configFileExists() {
@@ -39,12 +45,20 @@ class SdkProperties {
 
 	_loadCache() {
 		if (fs.existsSync(path.resolve(__dirname, CONFIG_FILE))) {
-			CONFIG_FILE_CACHE = require(CONFIG_FILE);
+			CONFIG_FILE_CACHE = JSON.parse(fs.readFileSync(CONFIG_FILE,'utf8'));
 		}
 	}
 
 	getSdkPath() {
-		return path.join(HOME_PATH, `${FOLDERS.SUITECLOUD_SDK}/${FOLDERS.NODE_CLI}/${this.getSdkFileName()}`);
+		return path.join(this.getSdkBasePath(), `${FOLDERS.SUITECLOUD_SDK}/${FOLDERS.NODE_CLI}/${this.getSdkFileName()}`);
+	}
+
+	getCommandTimeout() {
+		return this._commandTimeout;
+	}
+
+	setCommandTimeout(commandTimeout) {
+		this._commandTimeout = commandTimeout
 	}
 }
 

@@ -22,13 +22,11 @@ module.exports = class CommandActionExecutor {
 		assert(dependencies.cliConfigurationService);
 		assert(dependencies.commandsMetadataService);
 		assert(dependencies.log);
-		assert(dependencies.sdkPath);
 
 		this._executionPath = dependencies.executionPath;
 		this._cliConfigurationService = dependencies.cliConfigurationService;
 		this._commandsMetadataService = dependencies.commandsMetadataService;
 		this._log = dependencies.log;
-		this._sdkPath = dependencies.sdkPath;
 
 		if (!dependencies.executionEnvironmentContext) {
 			this._executionEnvironmentContext = new ExecutionEnvironmentContext();
@@ -155,18 +153,14 @@ module.exports = class CommandActionExecutor {
 	}
 
 	_getCommand(runInInteractiveMode, projectFolder, commandMetadata) {
-		const commandPath = commandMetadata.generator;
-		const commandGenerator = require(commandPath);
-		if (!commandGenerator) {
-			throw `Path ${commandPath} doesn't contain any command`;
-		}
+
+		const commandGenerator = commandMetadata.generator;
 		return commandGenerator.create({
 			commandMetadata: commandMetadata,
 			projectFolder: projectFolder,
 			executionPath: this._executionPath,
 			runInInteractiveMode: runInInteractiveMode,
 			log: this._log,
-			sdkPath: this._sdkPath,
 			executionEnvironmentContext: this._executionEnvironmentContext,
 		});
 	}
