@@ -50,7 +50,7 @@
     {
         "commandName": "account:setup",
         "interactiveGenerator": "./commands/SetupCommandGenerator",
-        "nonInteractiveGenerator": "./commands/SetupCommandGenerator"
+        "nonInteractiveGenerator": "./commands/SetupNonInteractiveCommandGenerator"
     },
     {
         "commandName": "object:update",
