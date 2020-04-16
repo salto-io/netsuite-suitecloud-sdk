@@ -76,7 +76,7 @@ module.exports = class SetupNonInteractiveCommandGenerator extends SetupCommandG
 		}
 		const authIdData = existingAuthIDsResponse.data[authId];
 		if (!authIdData) {
-			throw Error()
+			throw Error(`This authentication ID (${authId}) doesn't exists. Please use an existing one or create a new one.`)
 		}
 		return authIdData.accountInfo
 	}
@@ -105,6 +105,9 @@ module.exports = class SetupNonInteractiveCommandGenerator extends SetupCommandG
 			}
 
 			const operationResult = await this._saveToken(commandParams, false);
+			if (SDKOperationResultUtils.hasErrors(operationResult)) {
+				throw SDKOperationResultUtils.getErrorMessagesString(operationResult);
+			}
 			accountInfo = operationResult.data.accountInfo;
 		} else {
 			mode = AUTH_MODE.REUSE;
