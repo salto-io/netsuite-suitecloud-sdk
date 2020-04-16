@@ -46,7 +46,7 @@ module.exports = class CommandUserExtension {
 
 	onError(options) {
 		if (!this._cliConfig.onError) {
-			return options;
+			throw options;
 		}
 		this._cliConfig.onError(options);
 	}
