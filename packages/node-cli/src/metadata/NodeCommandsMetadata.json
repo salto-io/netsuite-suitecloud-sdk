@@ -4,7 +4,6 @@
         "alias": "sa",
         "description": "Sets up an account to use with the SuiteCloud CLI for Node.js.",
         "isSetupRequired": false,
-        "forceInteractiveMode": true,
         "options": [
             {
                 "name": "dev",
@@ -12,6 +11,46 @@
                 "description": "Specify the domain URL of the account you want to use. You only need to specify the domain URL if you are not using a production account.",
                 "type": "FLAG",
                 "mandatory": false
+            },
+            {
+              "name": "authid",
+              "option": "authid",
+              "description": "Specify an existing or a new authentication id.",
+              "mandatory": true,
+              "type": "SINGLE",
+              "usage": "123",
+              "defaultOption": false,
+              "disableInIntegrationMode": false
+            },
+            {
+              "name": "accountid",
+              "option": "accountid",
+              "description": "Specify the account id.",
+              "mandatory": false,
+              "type": "SINGLE",
+              "usage": "2056431",
+              "defaultOption": false,
+              "disableInIntegrationMode": false
+            },
+            {
+              "name": "tokenid",
+              "option": "tokenid",
+              "description": "Specify the token id.",
+              "mandatory": false,
+              "type": "SINGLE",
+              "usage": "342gf354124235saddsb12351as23412341dssvdsf141dsfq",
+              "defaultOption": false,
+              "disableInIntegrationMode": false
+            },
+            {
+              "name": "tokensecret",
+              "option": "tokensecret",
+              "description": "Specify the token secret.",
+              "mandatory": false,
+              "type": "SINGLE",
+              "usage": "34hj23g4jhk23kf4g123f51g23f5jh23g4hj134123j1l2k3j",
+              "defaultOption": false,
+              "disableInIntegrationMode": false
             }
         ]
     },
