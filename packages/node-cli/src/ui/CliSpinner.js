@@ -6,8 +6,13 @@
 
 const assert = require('assert');
 const Spinner = require('cli-spinner').Spinner;
+const { compareLogLevels, logger } = require('@salto-io/logging');
 
 const SPINNER_STRING = '⠋⠙⠹⠸⠼⠴⠦⠧⠏';
+
+const currentLogLevel = logger.config.minLevel;
+const verbose = currentLogLevel !== 'none'
+	&& compareLogLevels(currentLogLevel, 'debug') >= 0;
 
 module.exports = {
 	async executeWithSpinner(context) {
@@ -22,12 +27,18 @@ module.exports = {
 		// spinner.setSpinnerString(SPINNER_STRING);
 
 		try {
+			if (verbose) {
 			spinner.start();
+			}
 			const result = await promise;
+			if (verbose) {
 			spinner.stop(true);
+			}
 			return result;
 		} catch (error) {
+			if (verbose) {
 			spinner.stop(true);
+			}
 			throw error;
 		}
 	},
