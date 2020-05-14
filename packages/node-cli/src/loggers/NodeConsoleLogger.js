@@ -4,6 +4,7 @@
  */
 'use strict';
 
+const { logger } = require('@salto-io/logging');
 const ConsoleLogger = require('./ConsoleLogger');
 
 const loadLoggerFontFormatter = async () => {
@@ -11,6 +12,8 @@ const loadLoggerFontFormatter = async () => {
 	return { COLORS, BOLD };
 };
 const fontFormatterPromise = loadLoggerFontFormatter();
+
+const log = logger(module);
 
 class NodeConsoleLogger extends ConsoleLogger {
 
@@ -39,7 +42,7 @@ class NodeConsoleLogger extends ConsoleLogger {
 	}
 
 	_println(message, color) {
-		console.log(color(message));
+		log.debug(color(message));
 	}
 
 }
