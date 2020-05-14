@@ -21,14 +21,21 @@ module.exports = {
 		// TODO: set spinner string conditionally based on the terminal cli is executed in
 		// spinner.setSpinnerString(SPINNER_STRING);
 
-        try {
-            spinner.start();
-            const result = await promise;
-            spinner.stop(true);
-            return result;
-        } catch (error) {
-            spinner.stop(true);
-            throw error;
-        }
+		const verbose = process.env.IS_SDF_VERBOSE !== 'false';
+		try {
+			if (verbose) {
+				spinner.start();
+			}
+			const result = await promise;
+			if (verbose) {
+				spinner.stop(true);
+			}
+			return result;
+		} catch (error) {
+			if (verbose) {
+				spinner.stop(true);
+			}
+			throw error;
+		}
 	}
 };
