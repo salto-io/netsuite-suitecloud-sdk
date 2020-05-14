@@ -10,6 +10,7 @@ const FileSystemService = require('../services/FileSystemService');
 const TemplateKeys = require('../templates/TemplateKeys');
 const chalk = require('chalk');
 const { join } = require('path');
+const NodeUtils = require('../utils/NodeUtils');
 const { FOLDERS } = require('../ApplicationConstants');
 
 module.exports = class CreateObjectCommandGenerator extends BaseCommandGenerator {
@@ -112,9 +113,9 @@ module.exports = class CreateObjectCommandGenerator extends BaseCommandGenerator
 			bindings: [{id: 'scriptid', value: answers.type.prefix + answers.objectfilename}],
 		});
 		return Promise.all([createFilePromise, createObjectPromise]).then(() => {
-			console.log(
-				`${answers.objectfilename} & ${answers.relatedfilename} were created successfully.`
-			);
+			NodeUtils.println(
+				`${answers.objectfilename} & ${answers.relatedfilename} were created successfully.`,
+				NodeUtils.COLORS.INFO);
 		});
 	}
 };

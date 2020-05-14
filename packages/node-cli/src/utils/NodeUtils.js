@@ -18,7 +18,10 @@ const padding = "\u0020\u0020\u0020\u0020";//4 spaces
 class NodeUtils {
 
 	println(message, color) {
-		console.log(this.formatString(message, { color: color }));
+		const verbose = process.env.IS_SDF_VERBOSE !== 'false';
+		if (verbose) {
+			console.log(this.formatString(message, { color: color }));
+		}
 	}
 
 	formatString(str, options) {
