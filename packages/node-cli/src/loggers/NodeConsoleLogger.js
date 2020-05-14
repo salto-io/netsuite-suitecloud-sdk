@@ -5,8 +5,11 @@
 'use strict';
 
 const chalk = require('chalk');
+const { logger } = require('@salto-io/logging');
 const ConsoleLogger = require('./ConsoleLogger');
 const { COLORS } = require('./LoggerConstants');
+
+const log = logger(module);
 
 class NodeConsoleLogger extends ConsoleLogger {
 
@@ -27,7 +30,7 @@ class NodeConsoleLogger extends ConsoleLogger {
 	}
 
 	_println(message, color, isBold) {
-		console.log(this._formatString(message, { color: color, bold: isBold }));
+		log.debug(this._formatString(message, { color: color, bold: isBold }));
 	}
 
 	_formatString(str, options) {
