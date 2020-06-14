@@ -6,6 +6,7 @@
 
 const os = require('os');
 const chalk = require('chalk');
+const { logger } = require('@salto-io/logging');
 const AVAILABLE_COLORS = {
 	DEFAULT: chalk.white,
 	RESULT: chalk.green,
@@ -14,14 +15,12 @@ const AVAILABLE_COLORS = {
 	WARNING: chalk.yellow,
 };
 const padding = "\u0020\u0020\u0020\u0020";//4 spaces
+const log = logger(module);
 
 class NodeUtils {
 
 	println(message, color) {
-		const verbose = process.env.IS_SDF_VERBOSE !== 'false';
-		if (verbose) {
-			console.log(this.formatString(message, { color: color }));
-		}
+		log.debug(this.formatString(message, { color: color }))
 	}
 
 	formatString(str, options) {
@@ -44,7 +43,7 @@ class NodeUtils {
 	// https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color
 	get COLORS() {
 		return AVAILABLE_COLORS;
-	}		
+	}
 	get lineBreak() {
 		return os.EOL;
 	}
