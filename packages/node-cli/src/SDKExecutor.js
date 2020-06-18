@@ -21,11 +21,16 @@ const url = require('url');
 const TranslationService = require('./services/TranslationService');
 const { ERRORS } = require('./services/TranslationKeys');
 const SDKErrorCodes = require('./SDKErrorCodes');
-const HOME_PATH = require('os').homedir();
+const os = require('os');
+const { unlinkSync, writeFileSync } = require('fs');
 
+const HOME_PATH = os.homedir();
 const DATA_EVENT = 'data';
 const CLOSE_EVENT = 'close';
 const UTF8 = 'utf8';
+
+const isWin = process.platform === 'win32'; // taken from https://stackoverflow.com/questions/8683895/how-do-i-determine-the-current-operating-system-with-node-js
+const echoOffCommand = '@echo off'; // to avoid echoing the commands in the .bat file
 
 module.exports.SDKExecutor = class SDKExecutor {
 	constructor(authenticationService) {
@@ -82,7 +87,14 @@ module.exports.SDKExecutor = class SDKExecutor {
 			const vmOptions = `${proxyOptions} ${integrationModeOption} ${clientPlatformVersionOption}`;
 			const jvmCommand = `java -jar ${vmOptions} ${quotedSdkJarPath} ${executionContext.getCommand()} ${cliParams}`;
 
-			const childProcess = spawn(jvmCommand, [], { shell: true });
+			const useScriptCommand = isWin && jvmCommand.length > 2000; //https://support.microsoft.com/en-us/help/830473/command-prompt-cmd-exe-command-line-string-limitation
+			const command = useScriptCommand
+				? `${os.tmpdir()}${path.sep}sdf_command_${String(Date.now())}.bat`
+				: jvmCommand;
+			if (useScriptCommand) {
+				writeFileSync(command, `${echoOffCommand}\n${jvmCommand}`);
+			}
+			const childProcess = spawn(command, [], { shell: true });
 
 			childProcess.stderr.on(DATA_EVENT, data => {
 				lastSdkError += data.toString(UTF8);
@@ -93,6 +105,9 @@ module.exports.SDKExecutor = class SDKExecutor {
 			});
 
 			childProcess.on(CLOSE_EVENT, code => {
+				if (useScriptCommand) {
+					unlinkSync(command)
+				}
 				if (code === 0) {
 					try {
 						const output = executionContext.isIntegrationMode()
