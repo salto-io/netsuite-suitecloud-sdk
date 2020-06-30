@@ -45,10 +45,10 @@ class SDKDownloadService {
 		);
 
 		const fullURL = `${SDKProperties.getDownloadURL()}/${SDKProperties.getSDKFileName()}`;
-
-		executeWithSpinner({
+		return executeWithSpinner({
 			action: this._downloadFile(fullURL, sdkDirectory),
 			message: TranslationService.getMessage(DOWNLOADING_SUITECLOUD_SDK, fullURL),
+			verbose: true
 		})
 			.then(() =>
 				NodeUtils.println(
