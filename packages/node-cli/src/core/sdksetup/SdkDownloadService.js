@@ -29,6 +29,8 @@ const {
 
 const VALID_JAR_CONTENT_TYPES = ['application/java-archive', 'application/x-java-archive', 'application/x-jar'];
 
+const successDownloadResponse = { success: true, installedVersion: SdkProperties.getSdkVersion() };
+
 class SdkDownloadService {
 	constructor() {
 		this._fileSystemService = new FileSystemService();
@@ -36,28 +38,35 @@ class SdkDownloadService {
 
 	async download() {
 		const sdkParentDirectory = this._fileSystemService.createFolder(HOME_PATH, FOLDERS.SUITECLOUD_SDK);
-		// remove OLD jar files
-		this._removeJarFilesFrom(sdkParentDirectory);
+		// // remove OLD jar files
+		// this._removeJarFilesFrom(sdkParentDirectory);
 		const sdkDirectory = this._fileSystemService.createFolder(sdkParentDirectory, FOLDERS.NODE_CLI);
 
+		const sdkDestinationFile = path.join(sdkDirectory, SdkProperties.getSdkFileName());
 		const fullURL = `${SdkProperties.getDownloadURL()}/${SdkProperties.getSdkFileName()}`;
-
+		if (this._fileSystemService.fileExists(sdkDestinationFile)) {
+			return successDownloadResponse;
+		}
 		try {
 			await executeWithSpinner({
-				action: this._downloadFile(fullURL, sdkDirectory),
+				action: this._downloadFile(fullURL, sdkDestinationFile),
 				message: NodeTranslationService.getMessage(DOWNLOADING_SUITECLOUD_SDK, fullURL),
-			})
+				verbose: true,
+			});
 			NodeConsoleLogger.info(NodeTranslationService.getMessage(DOWNLOADING_SUITECLOUD_SDK_SUCCESS));
+			return successDownloadResponse
 		}
 		catch (error) {
-			NodeConsoleLogger.error(NodeTranslationService.getMessage(DOWNLOADING_SUITECLOUD_SDK_ERROR, fullURL, unwrapExceptionMessage(error)))
+			const errMsg = unwrapExceptionMessage(error);
+			NodeConsoleLogger.error(NodeTranslationService.getMessage(DOWNLOADING_SUITECLOUD_SDK_ERROR, fullURL, errMsg));
+			return {success: false, errors: [errMsg]};
 		}
 	}
 
-	_downloadFile(url, sdkDirectory) {
+	_downloadFile(url, sdkDestinationFile) {
 		const proxy = process.env.npm_config_https_proxy || process.env.npm_config_proxy;
 		const isProxyRequired = proxy && !SdkProperties.configFileExists();
-		const removeJarFilesFrom = this._removeJarFilesFrom;
+		// const removeJarFilesFrom = this._removeJarFilesFrom;
 
 		const options = {
 			method: 'GET',
@@ -72,10 +81,9 @@ class SdkDownloadService {
 				throw NodeTranslationService.getMessage(DOWNLOADING_SUITECLOUD_SDK_ERROR_FILE_NOT_AVAILABLE);
 			}
 
-			// remove all jar files before writing response to file
-			removeJarFilesFrom(sdkDirectory)
+			// // remove all jar files before writing response to file
+			// removeJarFilesFrom(sdkDirectory)
 
-			const sdkDestinationFile = path.join(sdkDirectory, SdkProperties.getSdkFileName());
 			const file = fs.createWriteStream(sdkDestinationFile);
 			file.write(response.body, 'binary');
 			file.end();
