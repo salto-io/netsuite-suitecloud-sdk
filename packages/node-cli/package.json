@@ -36,6 +36,5 @@
 	},
 	"scripts": {
 		"test": "jest",
-		"postinstall": "node postinstall.js"
 	}
 }
