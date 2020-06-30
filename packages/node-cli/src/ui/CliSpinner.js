@@ -25,19 +25,19 @@ module.exports = {
 		const spinner = new Spinner(message);
 		// TODO: set spinner string conditionally based on the terminal cli is executed in
 		// spinner.setSpinnerString(SPINNER_STRING);
-
+		const showSpinner = verbose || context.verbose;
 		try {
-			if (verbose) {
-			spinner.start();
+			if (showSpinner) {
+				spinner.start();
 			}
 			const result = await promise;
-			if (verbose) {
-			spinner.stop(true);
+			if (showSpinner) {
+				spinner.stop(true);
 			}
 			return result;
 		} catch (error) {
-			if (verbose) {
-			spinner.stop(true);
+			if (showSpinner) {
+				spinner.stop(true);
 			}
 			throw error;
 		}

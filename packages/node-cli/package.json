@@ -36,7 +36,6 @@
 		"jest": "^26.4.2"
 	},
 	"scripts": {
-		"test": "jest",
-		"postinstall": "node postinstall.js"
+		"test": "jest"
 	}
 }
