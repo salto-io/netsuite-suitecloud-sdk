@@ -4,8 +4,7 @@
 */
 'use strict';
 
-const { DEFAULT_MESSAGES_FILE } = require('../ApplicationConstants');
-const MESSAGES = require(DEFAULT_MESSAGES_FILE);
+const MESSAGES = require('../../messages.json');
 
 class TranslationService {
 	_injectParameters(message, params) {
