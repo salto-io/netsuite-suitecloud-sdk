@@ -7,7 +7,7 @@
 const path = require('path');
 const FileUtils = require('../utils/FileUtils');
 const { SDK_COMMANDS_METADATA_FILE, NODE_COMMANDS_METADATA_FILE, COMMAND_GENERATORS_METADATA_FILE } = require('../ApplicationConstants');
-const SDK_WRAPPER_GENERATOR = 'commands/SDKWrapperCommandGenerator';
+const sdkWrapperGenerator = require('../commands/SDKWrapperCommandGenerator');
 let COMMANDS_METADATA_CACHE;
 
 function executeForEachCommandMetadata(commandsMetadata, func) {
@@ -26,7 +26,7 @@ module.exports = class CommandsMetadataService {
 	initializeCommandsMetadata() {
 		const sdkCommandsMetadata = this._getMetadataFromFile(path.join(this._rootCLIPath, SDK_COMMANDS_METADATA_FILE));
 		const nodeCommandsMetadata = this._getMetadataFromFile(path.join(this._rootCLIPath, NODE_COMMANDS_METADATA_FILE));
-		const commandGeneratorsMetadata = this._getMetadataFromFile(path.join(this._rootCLIPath, COMMAND_GENERATORS_METADATA_FILE));
+		const commandGeneratorsMetadata = require('../metadata/CommandGenerators');
 		let combinedMetadata = {
 			...sdkCommandsMetadata,
 			...nodeCommandsMetadata,
@@ -81,12 +81,12 @@ module.exports = class CommandsMetadataService {
 
 			const defaultGenerator = generatorMetadata && generatorMetadata.nonInteractiveGenerator
 				? generatorMetadata.nonInteractiveGenerator
-				: SDK_WRAPPER_GENERATOR;
-			commandMetadata.nonInteractiveGenerator = path.join(this._rootCLIPath, defaultGenerator);
+				: sdkWrapperGenerator;
+			commandMetadata.nonInteractiveGenerator = defaultGenerator;
 			commandMetadata.supportsInteractiveMode = false;
 
 			if (generatorMetadata && generatorMetadata.interactiveGenerator) {
-				commandMetadata.interactiveGenerator = path.join(this._rootCLIPath, generatorMetadata.interactiveGenerator);
+				commandMetadata.interactiveGenerator = generatorMetadata.interactiveGenerator;
 				commandMetadata.supportsInteractiveMode = true;
 			}
 		});

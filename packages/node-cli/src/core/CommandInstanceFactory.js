@@ -15,11 +15,10 @@ module.exports = class CommandInstanceFactory {
 		assert(typeof options.runInInteractiveMode === 'boolean');
 
 		const commandMetadata = options.commandMetadata;
-		const commandGeneratorPath = options.runInInteractiveMode
+		const Generator = options.runInInteractiveMode
 			? commandMetadata.interactiveGenerator
 			: commandMetadata.nonInteractiveGenerator;
 
-		const Generator = require(commandGeneratorPath);
 		const generatorInstance = new Generator({
 			commandMetadata,
 			projectFolder: options.projectFolder,
