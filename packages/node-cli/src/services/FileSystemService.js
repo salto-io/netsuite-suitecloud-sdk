@@ -152,6 +152,11 @@ module.exports = class FileSystemService {
 		return existsSync(path);
 	}
 
+	fileExists(path) {
+		assert(path);
+		return existsSync(path);
+	}
+
 	isFolderEmpty(path) {
 		assert(path);
 		readdirSync(path).length !== 0;
