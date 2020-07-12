@@ -43,10 +43,14 @@ class SDKDownloadService {
 			HOME_PATH,
 			FOLDERS.SUITECLOUD_SDK
 		);
-
+		const sdkDestinationFile = path.join(sdkDirectory, SDKProperties.getSDKFileName());
 		const fullURL = `${SDKProperties.getDownloadURL()}/${SDKProperties.getSDKFileName()}`;
+		if (this._fileSystemService.fileExists(sdkDestinationFile)) {
+			return;
+		}
+
 		return executeWithSpinner({
-			action: this._downloadFile(fullURL, sdkDirectory),
+			action: this._downloadFile(fullURL, sdkDestinationFile),
 			message: TranslationService.getMessage(DOWNLOADING_SUITECLOUD_SDK, fullURL),
 			verbose: true
 		})
@@ -68,7 +72,7 @@ class SDKDownloadService {
 			);
 	}
 
-	_downloadFile(url, sdkDirectory) {
+	_downloadFile(url, sdkDestinationFile) {
 		const proxy = process.env.npm_config_https_proxy || process.env.npm_config_proxy;
 
 		const isProxyRequired = proxy && !SDKProperties.configFileExists();
@@ -88,12 +92,6 @@ class SDKDownloadService {
 				);
 			}
 
-			// remove all JAR files before writing response to file
-			fs.readdirSync(sdkDirectory)
-				.filter(file => /[.]jar$/.test(file))
-				.map(file => fs.unlinkSync(path.join(sdkDirectory, file)));
-
-			const sdkDestinationFile = path.join(sdkDirectory, SDKProperties.getSDKFileName());
 			const file = fs.createWriteStream(sdkDestinationFile);
 			file.write(response.body, 'binary');
 			file.end();
