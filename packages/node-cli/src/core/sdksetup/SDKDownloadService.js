@@ -54,22 +54,25 @@ class SDKDownloadService {
 			message: TranslationService.getMessage(DOWNLOADING_SUITECLOUD_SDK, fullURL),
 			verbose: true
 		})
-			.then(() =>
+			.then(() => {
 				NodeUtils.println(
 					TranslationService.getMessage(DOWNLOADING_SUITECLOUD_SDK_SUCCESS),
 					NodeUtils.COLORS.INFO
 				)
-			)
-			.catch(error =>
+				return {success: true, errors: []}
+			})
+			.catch(error => {
+				const errMsg = unwrapExceptionMessage(error);
 				NodeUtils.println(
 					TranslationService.getMessage(
 						DOWNLOADING_SUITECLOUD_SDK_ERROR,
 						fullURL,
-						unwrapExceptionMessage(error)
+						errMsg
 					),
 					NodeUtils.COLORS.ERROR
 				)
-			);
+				return {success: false, errors: [errMsg]}
+			});
 	}
 
 	_downloadFile(url, sdkDestinationFile) {
@@ -84,7 +87,6 @@ class SDKDownloadService {
 			resolveWithFullResponse: true,
 			...(isProxyRequired && { proxy: proxy }),
 		};
-
 		return request(options).then(function(response) {
 			if (!VALID_JAR_CONTENT_TYPES.includes(response.headers['content-type'])) {
 				throw TranslationService.getMessage(
