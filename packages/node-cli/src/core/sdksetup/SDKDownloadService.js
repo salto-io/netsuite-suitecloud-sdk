@@ -46,7 +46,7 @@ class SDKDownloadService {
 		const sdkDestinationFile = path.join(sdkDirectory, SDKProperties.getSDKFileName());
 		const fullURL = `${SDKProperties.getDownloadURL()}/${SDKProperties.getSDKFileName()}`;
 		if (this._fileSystemService.fileExists(sdkDestinationFile)) {
-			return;
+			return {success: true, errors: []};
 		}
 
 		return executeWithSpinner({
@@ -59,7 +59,7 @@ class SDKDownloadService {
 					TranslationService.getMessage(DOWNLOADING_SUITECLOUD_SDK_SUCCESS),
 					NodeUtils.COLORS.INFO
 				)
-				return {success: true, errors: []}
+				return {success: true, errors: []};
 			})
 			.catch(error => {
 				const errMsg = unwrapExceptionMessage(error);
@@ -71,7 +71,7 @@ class SDKDownloadService {
 					),
 					NodeUtils.COLORS.ERROR
 				)
-				return {success: false, errors: [errMsg]}
+				return {success: false, errors: [errMsg]};
 			});
 	}
 
