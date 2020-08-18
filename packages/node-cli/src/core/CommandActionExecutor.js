@@ -20,13 +20,11 @@ module.exports = class CommandActionExecutor {
 		assert(dependencies.cliConfigurationService);
 		assert(dependencies.commandsMetadataService);
 		assert(dependencies.log);
-		assert(dependencies.sdkPath);
 
 		this._executionPath = dependencies.executionPath;
 		this._cliConfigurationService = dependencies.cliConfigurationService;
 		this._commandsMetadataService = dependencies.commandsMetadataService;
 		this._log = dependencies.log;
-		this._sdkPath = dependencies.sdkPath;
 
 		if (!dependencies.executionEnvironmentContext) {
 			this._executionEnvironmentContext = new ExecutionEnvironmentContext();
@@ -128,7 +126,6 @@ module.exports = class CommandActionExecutor {
 			executionPath: this._executionPath,
 			runInInteractiveMode: runInInteractiveMode,
 			log: this._log,
-			sdkPath: this._sdkPath,
 			executionEnvironmentContext: this._executionEnvironmentContext,
 		});
 	}

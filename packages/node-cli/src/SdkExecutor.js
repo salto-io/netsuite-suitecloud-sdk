@@ -15,11 +15,11 @@ const FileUtils = require('./utils/FileUtils');
 const spawn = require('child_process').spawn;
 const CLISettingsService = require('./services/settings/CLISettingsService');
 const EnvironmentInformationService = require('./services/EnvironmentInformationService');
-const url = require('url');
 const NodeTranslationService = require('./services/NodeTranslationService');
 const { ERRORS } = require('./services/TranslationKeys');
 const SdkErrorCodes = require('./SdkErrorCodes');
 const ExecutionEnvironmentContext = require('./ExecutionEnvironmentContext');
+const SdkProperties = require('./core/sdksetup/SdkProperties');
 const os = require('os');
 const { unlinkSync, writeFileSync } = require('fs');
 
@@ -31,9 +31,8 @@ const isWin = process.platform === 'win32'; // taken from https://stackoverflow.
 const echoOffCommand = '@echo off'; // to avoid echoing the commands in the .bat file
 
 module.exports = class SdkExecutor {
-	constructor(sdkPath, executionEnvironmentContext) {
-		this._sdkPath = sdkPath;
-
+	constructor(executionEnvironmentContext) {
+		this._sdkPath = SdkProperties.getSdkPath();
 		this._CLISettingsService = new CLISettingsService();
 		this._environmentInformationService = new EnvironmentInformationService();
 		this.childProcess = null;
