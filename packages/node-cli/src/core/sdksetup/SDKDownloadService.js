@@ -9,7 +9,7 @@ const path = require('path');
 const request = require('request-promise-native');
 const SDKProperties = require('./SDKProperties');
 
-const HOME_PATH = require('os').homedir();
+const BASE_PATH = process.env.NETSUITE_SDF_PATH ?? require('os').homedir();
 
 const { FOLDERS } = require('../../ApplicationConstants');
 
@@ -40,7 +40,7 @@ class SDKDownloadService {
 
 	download() {
 		const sdkDirectory = this._fileSystemService.createFolder(
-			HOME_PATH,
+			BASE_PATH,
 			FOLDERS.SUITECLOUD_SDK
 		);
 		const sdkDestinationFile = path.join(sdkDirectory, SDKProperties.getSDKFileName());
