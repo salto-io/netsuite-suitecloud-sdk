@@ -38,7 +38,7 @@ module.exports = class ImportFilesInputHandler extends BaseInputHandler {
 	constructor(options) {
 		super(options);
 		// TODO input handlers shouldn't execute actions. rework this
-		this._sdkExecutor = new SdkExecutor(this._sdkPath, this._executionEnvironmentContext);
+		this._sdkExecutor = new SdkExecutor(this._executionEnvironmentContext);
 
 		this._projectInfoService = new ProjectInfoService(this._projectFolder);
 		this._authId = getProjectDefaultAuthId(this._executionPath);
@@ -49,8 +49,8 @@ module.exports = class ImportFilesInputHandler extends BaseInputHandler {
 			throw NodeTranslationService.getMessage(ERRORS.IS_SUITEAPP);
 		}
 
-		const accountFileCabinetService = new AccountFileCabinetService(this._sdkPath, this._executionEnvironmentContext, this._authId);
-		
+		const accountFileCabinetService = new AccountFileCabinetService(this._executionEnvironmentContext, this._authId);
+
 		const listFoldersResult = await accountFileCabinetService.getAccountFileCabinetFolders();
 
 		const selectFolderQuestion = this._generateSelectFolderQuestion(listFoldersResult);

@@ -5,7 +5,6 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { VSCODE_PLATFORM } from '../ApplicationConstants';
-import { getSdkPath } from '../core/sdksetup/SdkProperties';
 import { FolderItem } from '../types/FolderItem';
 import { AccountFileCabinetService, actionResultStatus, AuthenticationUtils, ExecutionEnvironmentContext } from '../util/ExtensionUtil';
 import MessageService from './MessageService';
@@ -34,7 +33,7 @@ export default class ListFilesService {
 			return;
 		}
 
-		const accountFileCabinetService = new AccountFileCabinetService(getSdkPath(), this.executionEnvironmentContext, defaultAuthId);
+		const accountFileCabinetService = new AccountFileCabinetService(this.executionEnvironmentContext, defaultAuthId);
 		const listFoldersPromise = accountFileCabinetService.getAccountFileCabinetFolders();
 		const statusBarMessage = this.translationService.getMessage(LIST_FILES.LOADING_FOLDERS);
 		this.messageService.showStatusBarMessage(statusBarMessage, true, listFoldersPromise);
@@ -102,7 +101,7 @@ export default class ListFilesService {
 			return;
 		}
 
-		const accountFileCabinetService = new AccountFileCabinetService(getSdkPath(), this.executionEnvironmentContext, defaultAuthId);
+		const accountFileCabinetService = new AccountFileCabinetService(this.executionEnvironmentContext, defaultAuthId);
 		const listFilesPromise = accountFileCabinetService.listFiles(selectedFolder);
 		const statusBarMessage = this.translationService.getMessage(LIST_FILES.LISTING);
 		this.messageService.showStatusBarMessage(statusBarMessage, true, listFilesPromise);
