@@ -7,7 +7,6 @@
 const path = require('path');
 const fs = require('fs');
 const { SDK_FILENAME, FOLDERS, SDK_VERSION } = require('../../ApplicationConstants');
-const HOME_PATH = require('os').homedir();
 
 const pkgConfig = require('../../../package.json');
 const CONFIG_FILE = './config.json';
@@ -45,7 +44,10 @@ class SdkProperties {
 	}
 
 	getSdkPath() {
-		return path.join(HOME_PATH, `${FOLDERS.SUITECLOUD_SDK}/${FOLDERS.NODE_CLI}/${this.getSdkFileName()}`);
+		const BASE_PATH = process.env.NETSUITE_SDF_PATH !== undefined
+			? process.env.NETSUITE_SDF_PATH
+			: require('os').homedir();
+		return path.join(BASE_PATH, `${FOLDERS.SUITECLOUD_SDK}/${FOLDERS.NODE_CLI}/${this.getSdkFileName()}`);
 	}
 }
 

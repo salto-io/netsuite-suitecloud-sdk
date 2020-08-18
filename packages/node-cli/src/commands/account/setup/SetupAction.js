@@ -22,9 +22,9 @@ module.exports = class SetupAction extends BaseAction {
 	async execute(params) {
 		try {
 			if (params.mode === AUTH_MODE.OAUTH) {
-				return await authenticateWithOauth(params, this._sdkPath, this._executionPath);
+				return await authenticateWithOauth(params, this._executionPath);
 			} else if (params.mode === AUTH_MODE.SAVE_TOKEN) {
-				return await saveToken(params, this._sdkPath, this._executionPath);
+				return await saveToken(params, this._executionPath);
 			} else if (params.mode === AUTH_MODE.REUSE) {
 				const authId = params.authentication.authId;
 				const accountInfo = params.authentication.accountInfo;
