@@ -9,7 +9,9 @@ const path = require('path');
 const request = require('request-promise-native');
 const SdkProperties = require('./SdkProperties');
 
-const HOME_PATH = require('os').homedir();
+const BASE_PATH = process.env.NETSUITE_SDF_PATH !== undefined
+	? process.env.NETSUITE_SDF_PATH
+	: require('os').homedir();
 
 const { FOLDERS } = require('../../ApplicationConstants');
 
@@ -37,7 +39,7 @@ class SdkDownloadService {
 	}
 
 	async download() {
-		const sdkParentDirectory = this._fileSystemService.createFolder(HOME_PATH, FOLDERS.SUITECLOUD_SDK);
+		const sdkParentDirectory = this._fileSystemService.createFolder(BASE_PATH, FOLDERS.SUITECLOUD_SDK);
 		// // remove OLD jar files
 		// this._removeJarFilesFrom(sdkParentDirectory);
 		const sdkDirectory = this._fileSystemService.createFolder(sdkParentDirectory, FOLDERS.NODE_CLI);

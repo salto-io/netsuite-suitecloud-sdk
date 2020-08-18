@@ -84,7 +84,6 @@ describe('CommandActionExecutor ExecuteAction():', function() {
 			cliConfigurationService: new CliConfigurationService(),
 			commandsMetadataService: new CommandsMetadataService(),
 			log: mockConsoleLogger,
-			sdkPath: sdkPath,
 		});
 
 		mockCommandUserExtensionOnCompleted.mockClear();
@@ -167,7 +166,6 @@ describe('CommandActionExecutor ExecuteAction():', function() {
 			cliConfigurationService: new CliConfigurationService(),
 			commandsMetadataService: new CommandsMetadataServiceSetupRequired(),
 			log: mockConsoleLogger,
-			sdkPath: sdkPath,
 		});
 
 		try {
@@ -195,7 +193,6 @@ describe('CommandActionExecutor ExecuteAction():', function() {
 			cliConfigurationService: new CliConfigurationService(),
 			commandsMetadataService: new CommandsMetadataServiceNotSupportInteractiveMode(),
 			log: mockConsoleLogger,
-			sdkPath: sdkPath,
 		});
 
 		await commandExecutorWithoutAccountConf.executeAction({
@@ -214,7 +211,6 @@ describe('CommandActionExecutor ExecuteAction():', function() {
 			cliConfigurationService: new CliConfigurationService(),
 			commandsMetadataService: new CommandsMetadataService(),
 			log: mockConsoleLogger,
-			sdkPath: sdkPath,
 		});
 
 		await commandExecutorWithError.executeAction({
