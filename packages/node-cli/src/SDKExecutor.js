@@ -24,7 +24,10 @@ const SDKErrorCodes = require('./SDKErrorCodes');
 const os = require('os');
 const { unlinkSync, writeFileSync } = require('fs');
 
-const HOME_PATH = os.homedir();
+const BASE_PATH = process.env.NETSUITE_SDF_PATH !== undefined
+	? process.env.NETSUITE_SDF_PATH
+	: require('os').homedir();
+
 const DATA_EVENT = 'data';
 const CLOSE_EVENT = 'close';
 const UTF8 = 'utf8';
@@ -73,7 +76,7 @@ module.exports.SDKExecutor = class SDKExecutor {
 			const clientPlatformVersionOption = `${SDK_CLIENT_PLATFORM_VERSION_JVM_OPTION}=${process.versions.node}`;
 
 			const sdkJarPath = path.join(
-				HOME_PATH,
+				BASE_PATH,
 				`${FOLDERS.SUITECLOUD_SDK}/${SDKProperties.getSDKFileName()}`
 			);
 			if (!FileUtils.exists(sdkJarPath)) {

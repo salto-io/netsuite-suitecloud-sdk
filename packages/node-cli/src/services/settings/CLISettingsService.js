@@ -11,11 +11,14 @@ const path = require('path');
 const TranslationService = require('../TranslationService');
 const { ERRORS } = require('../TranslationKeys');
 
-const HOME_PATH = require('os').homedir();
+const BASE_PATH = process.env.NETSUITE_SDF_PATH !== undefined
+	? process.env.NETSUITE_SDF_PATH
+	: require('os').homedir();
+
 const { FILES, FOLDERS } = require('../../ApplicationConstants');
 
 const CLI_SETTINGS_FILEPATH = path.join(
-	HOME_PATH,
+	BASE_PATH,
 	FOLDERS.SUITECLOUD_SDK,
 	FILES.CLI_SETTINGS
 );
@@ -35,7 +38,7 @@ module.exports = class CLISettingsService {
 	}
 
 	_saveSettings(cliSettings) {
-		this._fileSystemService.createFolder(HOME_PATH, FOLDERS.SUITECLOUD_SDK);
+		this._fileSystemService.createFolder(BASE_PATH, FOLDERS.SUITECLOUD_SDK);
 		FileUtils.create(CLI_SETTINGS_FILEPATH, cliSettings);
 	}
 
