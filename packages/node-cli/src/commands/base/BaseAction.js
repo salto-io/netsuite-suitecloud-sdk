@@ -14,10 +14,9 @@ module.exports = class BaseAction {
 		this._executionPath = options.executionPath;
 		this._runInInteractiveMode = options.runInInteractiveMode;
 		this._log = options.log;
-		this._sdkPath = options.sdkPath;
 
 		this._executionEnvironmentContext = options.executionEnvironmentContext;
-		this._sdkExecutor = new SdkExecutor(this._sdkPath, this._executionEnvironmentContext);
+		this._sdkExecutor = new SdkExecutor(this._executionEnvironmentContext);
 	}
 
 	async preExecute(params) {
