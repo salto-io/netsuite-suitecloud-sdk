@@ -87,7 +87,7 @@ module.exports = class AccountCiAction extends BaseAction {
 			} else if (params[COMMAND.OPTIONS.URL]) {
 				params[COMMAND.OPTIONS.DEV] = true;
 			}
-			return await saveToken(params, this._sdkPath, this._executionPath);
+			return await saveToken(params, this._executionPath);
 		} else {
 			throw new CLIException(NodeTranslationService.getMessage(COMMAND_ACCOUNTCI.SAVETOKEN_MANDATORY));
 		}
