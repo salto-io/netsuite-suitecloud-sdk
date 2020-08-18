@@ -45,13 +45,14 @@ const CREATE_NEW_AUTH = '******CREATE_NEW_AUTH*******!£$%&*';
 module.exports = class SetupInputHandler extends BaseInputHandler {
 	constructor(options) {
 		super(options);
-		this._projectInfoService = new ProjectInfoService(this._projectFolder);
+		// TODO input handlers shouldn't execute actions. rework this
+		this._sdkExecutor = new SdkExecutor();
 	}
 
 	async getParameters(params) {
 		this._projectInfoService.checkWorkingDirectoryContainsValidProject(this._commandMetadata.name);
 
-		const authIDActionResult = await getAuthIds(this._sdkPath);
+		const authIDActionResult = await getAuthIds();
 		if (!authIDActionResult.isSuccess()) {
 			throw authIDActionResult.errorMessages;
 		}
