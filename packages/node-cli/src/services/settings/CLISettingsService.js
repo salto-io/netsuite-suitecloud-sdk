@@ -13,10 +13,13 @@ const {
 	ERRORS: { SDK_SETTINGS_FILE },
 } = require('../TranslationKeys');
 
-const HOME_PATH = require('os').homedir();
+const BASE_PATH = process.env.NETSUITE_SDF_PATH !== undefined
+	? process.env.NETSUITE_SDF_PATH
+	: require('os').homedir();
+
 const { FILES, FOLDERS } = require('../../ApplicationConstants');
 
-const SDK_SETTINGS_FILEPATH = path.join(HOME_PATH, FOLDERS.SUITECLOUD_SDK, FILES.SDK_SETTINGS);
+const SDK_SETTINGS_FILEPATH = path.join(BASE_PATH, FOLDERS.SUITECLOUD_SDK, FILES.SDK_SETTINGS);
 
 const CLI_SETTINGS_PROPERTIES_KEYS = ['isJavaVersionValid'];
 const DEFAULT_CLI_SETTINGS = CLISettings.fromJson({
@@ -40,7 +43,7 @@ module.exports = class CLISettingsService {
 	}
 
 	_saveSettings(cliSettings) {
-		this._fileSystemService.createFolder(HOME_PATH, FOLDERS.SUITECLOUD_SDK);
+		this._fileSystemService.createFolder(BASE_PATH, FOLDERS.SUITECLOUD_SDK);
 		FileUtils.create(SDK_SETTINGS_FILEPATH, cliSettings);
 	}
 
