@@ -34,7 +34,7 @@ export default class ListFilesService {
 			return;
 		}
 
-		const accountFileCabinetService = new AccountFileCabinetService(getSdkPath(), this.executionEnvironmentContext, defaultAuthId);
+		const accountFileCabinetService = new AccountFileCabinetService(this.executionEnvironmentContext, defaultAuthId);
 		const listFoldersPromise = accountFileCabinetService.getAccountFileCabinetFolders();
 		const statusBarMessage = this.translationService.getMessage(LIST_FILES.LOADING_FOLDERS);
 		this.messageService.showStatusBarMessage(statusBarMessage, true, listFoldersPromise);
@@ -84,7 +84,7 @@ export default class ListFilesService {
 			return;
 		}
 
-		const accountFileCabinetService = new AccountFileCabinetService(getSdkPath(), this.executionEnvironmentContext, defaultAuthId);
+		const accountFileCabinetService = new AccountFileCabinetService(this.executionEnvironmentContext, defaultAuthId);
 		const listFilesPromise = accountFileCabinetService.listFiles(selectedFolder);
 		const statusBarMessage = this.translationService.getMessage(LIST_FILES.LISTING);
 		this.messageService.showStatusBarMessage(statusBarMessage, true, listFilesPromise);

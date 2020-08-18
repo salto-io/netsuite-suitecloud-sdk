@@ -35,8 +35,8 @@ const INTERMEDIATE_COMMANDS = {
 };
 
 module.exports = class AccountFileCabinetService {
-	constructor(sdkPath, executionEnvironmentContext, authId) {
-		this._sdkExecutor = new SdkExecutor(sdkPath, executionEnvironmentContext);
+	constructor(executionEnvironmentContext, authId) {
+		this._sdkExecutor = new SdkExecutor(executionEnvironmentContext);
 		this._authId = authId;
 	}
 
