@@ -22,9 +22,8 @@ module.exports = class ListFilesInputHandler extends BaseInputHandler {
 		super(options);
 
 		// TODO input handlers shouldn't execute actions. rework this
-		this._sdkExecutor = new SdkExecutor(this._sdkPath, this._executionEnvironmentContext);
+		this._sdkExecutor = new SdkExecutor(this._executionEnvironmentContext);
 		this._accountFileCabinetService = new AccountFileCabinetService(
-			this._sdkPath,
 			this._executionEnvironmentContext,
 			getProjectDefaultAuthId(this._executionPath)
 		);
