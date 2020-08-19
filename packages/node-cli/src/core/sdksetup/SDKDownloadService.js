@@ -33,6 +33,8 @@ const VALID_JAR_CONTENT_TYPES = [
 	'application/x-jar',
 ];
 
+const successDownloadResponse = { success: true, installedVersion: SDKProperties.getSDKVersion() };
+
 class SDKDownloadService {
 	constructor() {
 		this._fileSystemService = new FileSystemService();
@@ -46,7 +48,7 @@ class SDKDownloadService {
 		const sdkDestinationFile = path.join(sdkDirectory, SDKProperties.getSDKFileName());
 		const fullURL = `${SDKProperties.getDownloadURL()}/${SDKProperties.getSDKFileName()}`;
 		if (this._fileSystemService.fileExists(sdkDestinationFile)) {
-			return {success: true, errors: []};
+			return successDownloadResponse;
 		}
 
 		return executeWithSpinner({
@@ -58,8 +60,8 @@ class SDKDownloadService {
 				NodeUtils.println(
 					TranslationService.getMessage(DOWNLOADING_SUITECLOUD_SDK_SUCCESS),
 					NodeUtils.COLORS.INFO
-				)
-				return {success: true, errors: []};
+				);
+				return successDownloadResponse;
 			})
 			.catch(error => {
 				const errMsg = unwrapExceptionMessage(error);
@@ -70,7 +72,7 @@ class SDKDownloadService {
 						errMsg
 					),
 					NodeUtils.COLORS.ERROR
-				)
+				);
 				return {success: false, errors: [errMsg]};
 			});
 	}
