@@ -8,7 +8,7 @@ const path = require('path');
 const fs = require('fs');
 const CONFIG_FILE = './config.json';
 const pkgConfig = require('../../../package.json');
-const { SDK_FILENAME } = require('../../ApplicationConstants');
+const { SDK_VERSION, SDK_FILENAME } = require('../../ApplicationConstants');
 
 let CONFIG_FILE_CACHE = null;
 
@@ -21,6 +21,10 @@ class SDKProperties {
 		// read config.js file if exists or use package.json
 		const configFile = this.configFileExists() ? CONFIG_FILE_CACHE : pkgConfig;
 		return configFile.sdkDownloadUrl;
+	}
+
+	getSDKVersion() {
+		return SDK_VERSION;
 	}
 
 	getSDKFileName() {
