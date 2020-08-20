@@ -10,10 +10,12 @@ const {
 	SDK_PROXY_JVM_OPTIONS,
 	FOLDERS,
 	SDK_REQUIRED_JAVA_VERSION,
+	SDK_VERSION,
 } = require('./ApplicationConstants');
 const SDKProperties = require('./core/sdksetup/SDKProperties');
 const path = require('path');
 const FileUtils = require('./utils/FileUtils');
+const NodeUtils = require('./utils/NodeUtils');
 const spawn = require('child_process').spawn;
 const CLISettingsService = require('./services/settings/CLISettingsService');
 const EnvironmentInformationService = require('./services/EnvironmentInformationService');
@@ -80,9 +82,10 @@ module.exports.SDKExecutor = class SDKExecutor {
 				`${FOLDERS.SUITECLOUD_SDK}/${SDKProperties.getSDKFileName()}`
 			);
 			if (!FileUtils.exists(sdkJarPath)) {
+				NodeUtils.println(`file ${sdkJarPath} is missing`, NodeUtils.COLORS.ERROR);
 				throw TranslationService.getMessage(
 					ERRORS.SDKEXECUTOR.NO_JAR_FILE_FOUND,
-					path.join(__dirname, '..')
+					SDK_VERSION
 				);
 			}
 			const quotedSdkJarPath = `"${sdkJarPath}"`;
