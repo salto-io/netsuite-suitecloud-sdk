@@ -9,6 +9,7 @@ const {
 	SDK_CLIENT_PLATFORM_JVM_OPTION,
 	SDK_CLIENT_PLATFORM_VERSION_JVM_OPTION,
 	SDK_COMPATIBLE_JAVA_VERSIONS,
+	SDK_VERSION,
 } = require('./ApplicationConstants');
 const path = require('path');
 const FileUtils = require('./utils/FileUtils');
@@ -19,6 +20,7 @@ const NodeTranslationService = require('./services/NodeTranslationService');
 const { ERRORS } = require('./services/TranslationKeys');
 const ExecutionEnvironmentContext = require('./ExecutionEnvironmentContext');
 const SdkProperties = require('./core/sdksetup/SdkProperties');
+const NodeConsoleLogger = require('./loggers/NodeConsoleLogger');
 const os = require('os');
 const { unlinkSync, writeFileSync } = require('fs');
 
@@ -110,7 +112,8 @@ module.exports = class SdkExecutor {
 		const customVmOptions = this._getCustomVmOptionsString();
 
 		if (!FileUtils.exists(this._sdkPath)) {
-			throw NodeTranslationService.getMessage(ERRORS.SDKEXECUTOR.NO_JAR_FILE_FOUND, path.join(__dirname, '..'));
+			NodeConsoleLogger.error(`file ${this._sdkPath} is missing`);
+			throw NodeTranslationService.getMessage(ERRORS.SDKEXECUTOR.NO_JAR_FILE_FOUND, SDK_VERSION);
 		}
 		const quotedSdkJarPath = `"${this._sdkPath}"`;
 
