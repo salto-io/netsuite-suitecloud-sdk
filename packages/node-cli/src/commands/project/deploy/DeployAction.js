@@ -133,11 +133,7 @@ module.exports = class DeployAction extends (
 
 			const operationResult = await executeWithSpinner({
 				action: this._sdkExecutor.execute(executionContextForDeploy),
-				message: NodeTranslationService.getMessage(
-					COMMAND_DEPLOY.MESSAGES.DEPLOYING,
-					this._projectName,
-					getProjectDefaultAuthId(this._executionPath),
-				),
+				message: NodeTranslationService.getMessage(COMMAND_DEPLOY.MESSAGES.DEPLOYING),
 			});
 
 			const isServerValidation = !!sdkParams[COMMAND.FLAGS.VALIDATE];
