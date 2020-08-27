@@ -1,4 +1,4 @@
-{
+module.exports = {
     "account:setup": {
         "name": "account:setup",
         "alias": "sa",
@@ -100,4 +100,4 @@
             }
         ]
     }
-}
+};

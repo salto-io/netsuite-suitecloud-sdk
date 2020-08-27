@@ -1,4 +1,4 @@
-<commerceextension objecttypeappid="" scriptid="{{scriptid}}">
+module.exports = `<commerceextension objecttypeappid="" scriptid="{{scriptid}}">
 	 <name></name>
 	 <description></description>
 	 <vendor></vendor>
@@ -6,4 +6,4 @@
 	 <version></version>
 	 <target></target>
 	 <basepath></basepath>
-</commerceextension>
+</commerceextension>`;
