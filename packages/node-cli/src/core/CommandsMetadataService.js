@@ -3,10 +3,8 @@
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
  */
 'use strict';
-
-const path = require('path');
+const _ = require('lodash');
 const FileUtils = require('../utils/FileUtils');
-const { SDK_COMMANDS_METADATA_FILE, NODE_COMMANDS_METADATA_FILE, COMMAND_GENERATORS_METADATA_FILE } = require('../ApplicationConstants');
 const sdkWrapperGenerator = require('../commands/SDKWrapperCommandGenerator');
 let COMMANDS_METADATA_CACHE;
 
@@ -20,12 +18,10 @@ function executeForEachCommandMetadata(commandsMetadata, func) {
 }
 
 module.exports = class CommandsMetadataService {
-	constructor(rootCLIPath) {
-		this._rootCLIPath = rootCLIPath;
-	}
+	constructor() {}
 	initializeCommandsMetadata() {
-		const sdkCommandsMetadata = this._getMetadataFromFile(path.join(this._rootCLIPath, SDK_COMMANDS_METADATA_FILE));
-		const nodeCommandsMetadata = this._getMetadataFromFile(path.join(this._rootCLIPath, NODE_COMMANDS_METADATA_FILE));
+		const sdkCommandsMetadata = _.cloneDeep(require('../metadata/SDKCommandsMetadata'));
+		const nodeCommandsMetadata = _.cloneDeep(require('../metadata/NodeCommandsMetadata'));
 		const commandGeneratorsMetadata = require('../metadata/CommandGenerators');
 		let combinedMetadata = {
 			...sdkCommandsMetadata,

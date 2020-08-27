@@ -1,4 +1,4 @@
-const SuiteCloudJestUnitTestRunner = require('@oracle/suitecloud-unit-testing/services/SuiteCloudJestUnitTestRunner');
+module.exports = `const SuiteCloudJestUnitTestRunner = require('@oracle/suitecloud-unit-testing/services/SuiteCloudJestUnitTestRunner');
 
 module.exports = {
 	defaultProjectFolder: 'src',
@@ -12,4 +12,4 @@ module.exports = {
 			},
 		},
 	},
-};
+};`;

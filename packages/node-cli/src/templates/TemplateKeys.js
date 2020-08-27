@@ -6,18 +6,18 @@
 
 module.exports = {
 	SCRIPTS: {
-		blankscript: require.resolve('./scripts/blankscript.js'),
+		blankscript: require('./scripts/blankscript.js'),
 	},
 	OBJECTS: {
-		commerceextension: require.resolve('./objects/commerceextension.xml'),
+		commerceextension: require('./objects/commerceextension.js'),
 	},
 	PROJECTCONFIGS: {
-		cliconfig: require.resolve('./projectconfigs/suitecloud.config.js'),
+		cliconfig: require('./projectconfigs/suitecloud.config.js'),
 	},
 	UNIT_TEST: {
-		cliconfig: require.resolve('./unittest/suitecloud.config.js.template'),
-		jestconfig: require.resolve('./unittest/jest.config.js.template'),
-		packagejson: require.resolve('./unittest/package.json.template'),
-		sampletest: require.resolve('./unittest/sample-test.js.template'),
+		cliconfig: require('./unittest/suitecloud.config.js.template.js'),
+		jestconfig: require('./unittest/jest.config.js.template.js'),
+		packagejson: require('./unittest/package.json.template.js'),
+		sampletest: require('./unittest/sample-test.js.template.js'),
 	}
 };

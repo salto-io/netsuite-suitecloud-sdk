@@ -1,6 +1,6 @@
 {
 	"name": "@salto-io/suitecloud-cli",
-	"version": "1.0.2-salto-13",
+	"version": "1.0.2-salto-14",
 	"license": "UPL-1.0",
 	"description": "SuiteCloud CLI for Node.js",
 	"keywords": [
@@ -29,8 +29,9 @@
 		"inquirer": "^6.3.1",
 		"request-promise-native": "^1.0.7",
 		"vm2": "^3.8.0",
-		"xml2js": "^0.4.19"
-	},
+		"xml2js": "^0.4.19",
+	        "lodash": "^4.17.20"
+    },
 	"devDependencies": {
 		"jest": "^24.7.1"
 	},
