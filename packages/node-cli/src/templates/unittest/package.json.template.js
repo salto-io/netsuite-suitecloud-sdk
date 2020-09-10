@@ -1,4 +1,4 @@
-{
+module.exports = `{
   "name": "suitecloud-project",
   "version": "{{version}}",
   "scripts": {
@@ -8,4 +8,4 @@
     "jest": "^26.0.1",
     "@oracle/suitecloud-unit-testing": "^1.1.1"
   }
-}
+}`;

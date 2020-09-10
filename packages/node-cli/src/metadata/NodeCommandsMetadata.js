@@ -1,4 +1,4 @@
-{
+module.exports = {
     "account:ci": {
         "name": "account:ci",
         "description": "Set up an account to use with the SuiteCloud CLI for Node.js. This command only supports non-interactive mode.",
@@ -99,4 +99,4 @@
             }
         }
     }
-}
+};

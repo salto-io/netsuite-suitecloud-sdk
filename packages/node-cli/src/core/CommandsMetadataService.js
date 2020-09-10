@@ -3,16 +3,7 @@
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
  */
 'use strict';
-
-const path = require('path');
 const FileUtils = require('../utils/FileUtils');
-const {
-	SDK_COMMANDS_METADATA_FILE,
-	SDK_COMMANDS_METADATA_PATCH_FILE,
-	NODE_COMMANDS_METADATA_FILE,
-	COMMAND_GENERATORS_METADATA_FILE,
-} = require('../ApplicationConstants');
-const SDK_WRAPPER_GENERATOR = 'commands/SdkWrapperCommandGenerator';
 
 let commandsMetadataCache;
 
@@ -27,16 +18,15 @@ function executeForEachCommandMetadata(commandsMetadata, func) {
 
 module.exports = class CommandsMetadataService {
 	constructor() {
-		this._rootCLIPath = path.dirname(__dirname, '../');
 		this._initializeCommandsMetadata();
 	}
 
 	_initializeCommandsMetadata() {
 		if (!commandsMetadataCache) {
-			const sdkCommandsMetadata = this._getMetadataFromFile(path.join(this._rootCLIPath, SDK_COMMANDS_METADATA_FILE));
-			const SdkCommandsMetadataPatch = this._getMetadataFromFile(path.join(this._rootCLIPath, SDK_COMMANDS_METADATA_PATCH_FILE));
-			const nodeCommandsMetadata = this._getMetadataFromFile(path.join(this._rootCLIPath, NODE_COMMANDS_METADATA_FILE));
-			const commandGeneratorsMetadata = this._getMetadataFromFile(path.join(this._rootCLIPath, COMMAND_GENERATORS_METADATA_FILE));
+			const sdkCommandsMetadata = require('../metadata/SdkCommandsMetadata');
+			const SdkCommandsMetadataPatch = require('../metadata/SdkCommandsMetadataPatch');
+			const nodeCommandsMetadata = require('../metadata/NodeCommandsMetadata');
+			const commandGeneratorsMetadata = require('../metadata/CommandGenerators');
 
 			let combinedSdkCommandMetadata = this._combineMetadata(sdkCommandsMetadata, SdkCommandsMetadataPatch);
 			let combinedMetadata = {
@@ -97,7 +87,7 @@ module.exports = class CommandsMetadataService {
 			const generatorMetadata = commandGeneratorsMetadata.find((generatorMetadata) => {
 				return generatorMetadata.commandName === commandMetadata.name;
 			});
-			commandMetadata.generator = path.join(this._rootCLIPath, generatorMetadata.generator);
+			commandMetadata.generator = generatorMetadata.generator;
 			commandMetadata.supportsInteractiveMode = generatorMetadata.supportsInteractiveMode;
 		});
 		return commandsMetadata;
