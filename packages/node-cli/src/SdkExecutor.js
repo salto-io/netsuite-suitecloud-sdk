@@ -19,10 +19,15 @@ const url = require('url');
 const NodeTranslationService = require('./services/NodeTranslationService');
 const { ERRORS } = require('./services/TranslationKeys');
 const SdkErrorCodes = require('./SdkErrorCodes');
+const os = require('os');
+const { unlinkSync, writeFileSync } = require('fs');
 
 const DATA_EVENT = 'data';
 const CLOSE_EVENT = 'close';
 const UTF8 = 'utf8';
+
+const isWin = process.platform === 'win32'; // taken from https://stackoverflow.com/questions/8683895/how-do-i-determine-the-current-operating-system-with-node-js
+const echoOffCommand = '@echo off'; // to avoid echoing the commands in the .bat file
 
 module.exports = class SdkExecutor {
 	constructor(sdkPath) {
@@ -42,15 +47,16 @@ module.exports = class SdkExecutor {
 				};
 			}
 			try {
-				this.childProcess = this._launchJvmCommand(executionContext);
-				this._addChildProcessListeners(executionContext.isIntegrationMode(), resolve, reject);
+				const { childProcess, commandFile } = this._launchJvmCommand(executionContext);
+				this.childProcess = childProcess;
+				this._addChildProcessListeners(executionContext.isIntegrationMode(), commandFile, resolve, reject);
 			} catch (e) {
 				reject(e);
 			}
 		});
 	}
 
-	_addChildProcessListeners(isIntegrationMode, resolve, reject) {
+	_addChildProcessListeners(isIntegrationMode, commandFile, resolve, reject) {
 		let lastSdkOutput = '';
 		let lastSdkError = '';
 
@@ -62,6 +68,9 @@ module.exports = class SdkExecutor {
 		});
 
 		this.childProcess.on(CLOSE_EVENT, (code) => {
+			if (commandFile) {
+				unlinkSync(commandFile)
+			}
 			if (code === 0) {
 				try {
 					const output = isIntegrationMode ? JSON.parse(lastSdkOutput) : lastSdkOutput;
@@ -105,7 +114,17 @@ module.exports = class SdkExecutor {
 		const vmOptions = `${proxyOptions} ${integrationModeOption} ${clientPlatformVersionOption}`;
 		const jvmCommand = `java -jar ${vmOptions} ${quotedSdkJarPath} ${executionContext.getCommand()} ${cliParams}`;
 
-		return spawn(jvmCommand, [], { shell: true });
+		const useScriptCommand = isWin && jvmCommand.length > 2000; //https://support.microsoft.com/en-us/help/830473/command-prompt-cmd-exe-command-line-string-limitation
+		const command = useScriptCommand
+			? `${os.tmpdir()}${path.sep}sdf_command_${String(Date.now())}.bat`
+			: jvmCommand;
+		if (useScriptCommand) {
+			writeFileSync(command, `${echoOffCommand}\n${jvmCommand}`);
+		}
+		return {
+			childProcess: spawn(command, [], { shell: true }),
+			commandFile: useScriptCommand ? command : undefined,
+		};
 	}
 
 	_getProxyOptions() {
