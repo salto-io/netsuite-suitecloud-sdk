@@ -1,7 +1,7 @@
-{
-    "account:savetoken": {
-        "name": "account:savetoken",
-        "description": "Saves a TBA token that you issued previously in NetSuite.",
+module.exports = {
+	"account:savetoken": {
+		"name": "account:savetoken",
+		"description": "Saves a TBA token that you issued previously in NetSuite.",
         "isSetupRequired": false,
         "options": {
             "account": {
@@ -93,4 +93,4 @@
             }
         }
     }
-}
+};

@@ -113,11 +113,7 @@ module.exports = class CommandActionExecutor {
 
 	_getCommand(runInInteractiveMode, projectFolder, commandMetadata) {
 
-		const commandPath = commandMetadata.generator;
-		const commandGenerator = require(commandPath);
-		if (!commandGenerator) {
-			throw `Path ${commandPath} doesn't contain any command`;
-		}
+		const commandGenerator = commandMetadata.generator;
 		return commandGenerator.create({
 			commandMetadata: commandMetadata,
 			projectFolder: projectFolder,

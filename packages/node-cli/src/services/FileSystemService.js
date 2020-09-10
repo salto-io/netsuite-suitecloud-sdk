@@ -62,27 +62,23 @@ module.exports = class FileSystemService {
 		assert(options.fileName);
 
 		return new Promise((resolve, reject) => {
-			readFile(options.template, CHAR_ENCODING_UTF8, (readingError, content) => {
-				if (readingError) {
-					reject(readingError);
-				}
-				if (Array.isArray(options.bindings)) {
-					content = this._processTemplateBindings(content, options.bindings);
-				}
+			let content = options.template;
+			if (Array.isArray(options.bindings)) {
+				content = this._processTemplateBindings(content, options.bindings);
+			}
 
 				const fullFileName = options.fileExtension ? `${options.fileName}.${options.fileExtension}` : `${options.fileName}`;
 
-				writeFile(
+			writeFile(
 					path.join(options.destinationFolder, fullFileName),
-					content.toString(),
-					(writingError, data) => {
-						if (writingError) {
-							reject(writingError);
-						}
-						resolve();
+				content.toString(),
+				(writingError, data) => {
+					if (writingError) {
+						reject(writingError);
 					}
-				);
-			});
+					resolve();
+				}
+			);
 		});
 	}
 
