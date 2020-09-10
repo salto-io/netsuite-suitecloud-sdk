@@ -1,4 +1,4 @@
-import record from 'N/record';
+module.exports = `import record from 'N/record';
 import Record from 'N/record/instance';
 
 jest.mock('N/record');
@@ -34,4 +34,4 @@ describe('Sample test with provided record module stubs', () => {
 		expect(Record.save).toHaveBeenCalledWith({enableSourcing: false});
 		expect(salesOrderId).toBe(updatedSalesOrderId);
 	});
-});
+});`;
