@@ -4,6 +4,8 @@
  */
 'use strict';
 
+const SDK_VERSION = '2022.2.1';
+
 module.exports = {
 	AUTHORIZATION_PROPERTIES_KEYS: {
 		NEEDS_REAUTHORIZATION: 'needsReauthorization',
@@ -13,6 +15,9 @@ module.exports = {
 	SDK_COMMANDS_METADATA_PATCH_FILE: 'metadata/SdkCommandsMetadataPatch.json', //Overwrites selected properties in SdkCommandsMetadata.json file that are specific for SuiteCloud CLI for Node.js
 	NODE_COMMANDS_METADATA_FILE: 'metadata/NodeCommandsMetadata.json',
 	COMMAND_GENERATORS_METADATA_FILE: 'metadata/CommandGenerators.json',
+	SDK_VERSION,
+	COMPATIBLE_NS_VERSION: '2022.2',
+	SDK_FILENAME: `cli-${SDK_VERSION}.jar`,
 	SDK_COMPATIBLE_JAVA_VERSIONS: ['17', '21'],
 	SDK_INTEGRATION_MODE_JVM_OPTION: '-DintegrationMode --add-opens java.base/java.io=ALL-UNNAMED',
 	SDK_CLIENT_PLATFORM: 'SuiteCloudCLIforNode.js',
