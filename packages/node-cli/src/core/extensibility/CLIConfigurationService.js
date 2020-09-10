@@ -4,7 +4,6 @@
  */
 'use strict';
 
-const { NodeVM } = require('vm2');
 const { lineBreak } = require('../../loggers/LoggerConstants');
 const FileUtils = require('../../utils/FileUtils');
 const path = require('path');
@@ -32,17 +31,7 @@ module.exports = class CLIConfigurationService {
 		}
 
 		try {
-			const nodeVm = new NodeVM({
-				console: 'inherit',
-				sandbox: {},
-				require: {
-					external: true,
-					builtin: ['*'],
-					root: this._executionPath,
-				},
-			});
-			const cliConfigFileContent = FileUtils.readAsString(cliConfigFile);
-			this._cliConfig = nodeVm.run(cliConfigFileContent, cliConfigFile);
+			this._cliConfig = eval(FileUtils.readAsString(cliConfigFile));
 		} catch (error) {
 			throw NodeTranslationService.getMessage(ERRORS.CLI_CONFIG_ERROR_LOADING_CONFIGURATION_MODULE, cliConfigFile, lineBreak, error);
 		}
