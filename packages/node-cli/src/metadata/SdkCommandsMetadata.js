@@ -1,4 +1,4 @@
-{
+module.exports = {
 	"project:adddependencies": {
 		"name": "project:adddependencies",
 		"sdkCommand": "adddependencies",
@@ -735,4 +735,4 @@
 			}
 		}
 	}
-}
+};
