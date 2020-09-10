@@ -1,4 +1,4 @@
-{
+module.exports = {
 	"account:manageauth": {
 		"options": {
 			"info": {
@@ -105,4 +105,4 @@
 			}
 		}
 	}
-}
+};
