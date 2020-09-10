@@ -1,4 +1,4 @@
-# IDEs and editors
+module.exports = `# IDEs and editors
 .idea
 *.iml
 *.iws
@@ -38,3 +38,4 @@ Thumbs.db
 
 # Output of 'npm pack'
 *.tgz
+`;

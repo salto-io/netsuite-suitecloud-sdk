@@ -4,16 +4,13 @@
  */
 'use strict';
 
-const path = require('path');
 const TranslationService = require('./TranslationService');
-const { DEFAULT_MESSAGES_FILE } = require('../ApplicationConstants');
-const FileUtils = require('../utils/FileUtils');
+const MESSAGES = require('../../messages.json');
 
 class NodeTranslationService extends TranslationService {
 	constructor() {
 		super();
-		const filePath = path.join(__dirname, DEFAULT_MESSAGES_FILE);
-		this._MESSAGES = FileUtils.readAsJson(filePath);
+		this._MESSAGES = MESSAGES;
 	}
 }
 
