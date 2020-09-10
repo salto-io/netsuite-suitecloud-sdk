@@ -9,7 +9,7 @@ const fs = require('fs');
 const { SDK_FILENAME, FOLDERS, SDK_VERSION } = require('../../ApplicationConstants');
 const HOME_PATH = require('os').homedir();
 
-const PACKAGE_FILE = '../../package.json';
+const pkgConfig = require('../../../package.json');
 const CONFIG_FILE = './config.json';
 
 let CONFIG_FILE_CACHE = null;
@@ -21,7 +21,7 @@ class SdkProperties {
 
 	getDownloadURL() {
 		// read config.js file if exists or use package.json
-		const configFile = this.configFileExists() ? CONFIG_FILE_CACHE : require(PACKAGE_FILE);
+		const configFile = this.configFileExists() ? CONFIG_FILE_CACHE : pkgConfig;
 		return configFile.sdkDownloadUrl;
 	}
 
@@ -39,7 +39,7 @@ class SdkProperties {
 
 	_loadCache() {
 		if (fs.existsSync(path.resolve(__dirname, CONFIG_FILE))) {
-			CONFIG_FILE_CACHE = require(CONFIG_FILE);
+			CONFIG_FILE_CACHE = JSON.parse(fs.readFileSync(CONFIG_FILE,'utf8'));
 		}
 	}
 
