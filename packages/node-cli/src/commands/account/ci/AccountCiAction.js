@@ -6,7 +6,8 @@
 
 const path = require('path');
 const BaseAction = require('../../base/BaseAction');
-const { saveToken } = require('../../../utils/AuthenticationUtils');
+const { getAuthIds, saveToken, setDefaultAuthentication } = require('../../../utils/AuthenticationUtils');
+const AuthenticateActionResult = require('../../../services/actionresult/AuthenticateActionResult');
 const { PROD_ENVIRONMENT_ADDRESS } = require('../../../ApplicationConstants');
 const CommandOptionsValidator = require('../../../core/CommandOptionsValidator');
 const ValidationErrorsFormatter = require('../../../utils/ValidationErrorsFormatter');
@@ -71,6 +72,15 @@ module.exports = class AccountCiAction extends BaseAction {
 		return params;
 	}
 
+	async _getAccountInfoByAuthId(authId) {
+		const existingAuthIDsResponse = await getAuthIds();
+		const authIdData = existingAuthIDsResponse.data[authId];
+		if (!authIdData) {
+			throw new CLIException(NodeTranslationService.getMessage(COMMAND_MANAGE_ACCOUNT.ERRORS.CREDENTIALS_NOT_FOUND));
+		}
+		return authIdData.accountInfo
+	}
+
 	async execute(params) {
 		if (params[COMMAND.FLAGS.SAVETOKEN]) {
 			const commandOptionsValidator = new CommandOptionsValidator();
@@ -89,7 +99,13 @@ module.exports = class AccountCiAction extends BaseAction {
 			}
 			return await saveToken(params, this._executionPath);
 		} else {
-			throw new CLIException(NodeTranslationService.getMessage(COMMAND_ACCOUNTCI.SAVETOKEN_MANDATORY));
+			const accountInfo = await this._getAccountInfoByAuthId(params.authid);
+			setDefaultAuthentication(this._executionPath, params.authid);
+			return AuthenticateActionResult.Builder.success()
+			.withMode('REUSE')
+			.withAuthId(params.authid)
+			.withAccountInfo(accountInfo)
+			.build();
 		}
 	}
 
