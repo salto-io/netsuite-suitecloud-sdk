@@ -137,11 +137,12 @@ module.exports = class ImportObjectsAction extends BaseAction {
 				action: Promise.all(arrayOfPromises),
 				message: NodeTranslationService.getMessage(MESSAGES.IMPORTING_OBJECTS, numberOfSteps, numberOfSteps),
 			});
-
+			if (operationResultData.errorImports.length > 0) {
+				return ActionResult.Builder.withErrors(operationResultData.errorImports.map(data => data.reason)).build();
+			}
 
 			//adding all the scripts id to the params
 			commandParams = {...sdkParams, [ANSWERS_NAMES.SCRIPT_ID]: scriptIdArray.join(' ')}
-
 			// At this point, the OperationResult will never be an error. It's handled before
 			return ActionResult.Builder.withData(operationResultData)
 				.withResultMessage(operationResultData.resultMessage)
