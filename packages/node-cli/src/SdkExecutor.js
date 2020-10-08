@@ -165,17 +165,18 @@ module.exports = class SdkExecutor {
 
 	_checkIfJavaVersionIssue() {
 		const javaVersionInstalled = this._environmentInformationService.getInstalledJavaVersionString();
+		if (!javaVersionInstalled) {
+			this._CLISettingsService.setJavaVersionValid(false);
+			return NodeTranslationService.getMessage(ERRORS.CLI_SDK_JAVA_VERSION_NOT_INSTALLED, SDK_COMPATIBLE_JAVA_VERSIONS.join(', '));
+		}
+
 		for (const compatibleJavaVersion of SDK_COMPATIBLE_JAVA_VERSIONS) {
 			if (javaVersionInstalled.startsWith(compatibleJavaVersion)) {
 				this._CLISettingsService.setJavaVersionValid(true);
 				return;
 			}
-		}
 
 		this._CLISettingsService.setJavaVersionValid(false);
-		if (javaVersionInstalled === '') {
-			return NodeTranslationService.getMessage(ERRORS.CLI_SDK_JAVA_VERSION_NOT_INSTALLED, SDK_COMPATIBLE_JAVA_VERSIONS.join(', '));
-		}
 		return NodeTranslationService.getMessage(ERRORS.CLI_SDK_JAVA_VERSION_NOT_COMPATIBLE, javaVersionInstalled, SDK_COMPATIBLE_JAVA_VERSIONS.join(', '));
 	}
 };
