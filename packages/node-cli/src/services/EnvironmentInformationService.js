@@ -18,11 +18,13 @@ module.exports = class EnvironmentInformationService {
 
 	getInstalledJavaVersionString() {
 		const childProcess = spawn('java', ['-version'], { shell: true });
-		const javaVersionOutput = childProcess.stderr.toString(); //The output should be: java full version "11.1.0_201-b09"
-		const javaVersion = /\bjava version\b|\bopenjdk version\b/gi.test(javaVersionOutput)
-			? javaVersionOutput.split(' ')[2].replace(/"|\r\n|\n|\r/g, '')
-			: '';
-		
-		return javaVersion; 
+		// The output can be:
+		// 1. java full version "11.1.0_201-b09"
+		// 2. openjdk version "11.0.8" 2020-07-14
+		// 3. NOTE: Picked up JDK_JAVA_OPTIONS: -Xmx1024m
+		// 	  openjdk version "11.0.8" 2020-07-14
+		const javaVersionOutput = childProcess.stderr.toString();
+		const match = javaVersionOutput.match(/version "(\d+)\.*/);
+		return match ? match[1] : undefined
 	}
 };
