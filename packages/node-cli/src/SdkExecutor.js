@@ -169,15 +169,14 @@ module.exports = class SdkExecutor {
 
 	_checkIfJavaVersionIssue() {
 		const javaVersionInstalled = this._environmentInformationService.getInstalledJavaVersionString();
+		if (!javaVersionInstalled) {
+			return NodeTranslationService.getMessage(ERRORS.CLI_SDK_JAVA_VERSION_NOT_INSTALLED, SDK_REQUIRED_JAVA_VERSION);
+		}
 		if (javaVersionInstalled.startsWith(SDK_REQUIRED_JAVA_VERSION)) {
 			this._CLISettingsService.setJavaVersionValid(true);
 			return;
 		}
-
 		this._CLISettingsService.setJavaVersionValid(false);
-		if (javaVersionInstalled === '') {
-			return NodeTranslationService.getMessage(ERRORS.CLI_SDK_JAVA_VERSION_NOT_INSTALLED, SDK_REQUIRED_JAVA_VERSION);
-		}
 		return NodeTranslationService.getMessage(ERRORS.CLI_SDK_JAVA_VERSION_NOT_COMPATIBLE, javaVersionInstalled, SDK_REQUIRED_JAVA_VERSION);
 	}
 };
