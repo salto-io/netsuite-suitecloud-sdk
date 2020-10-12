@@ -6,6 +6,7 @@
 
 const FileSystemService = require('../FileSystemService');
 const FileUtils = require('../../utils/FileUtils');
+const SdkProperties = require('../../core/sdksetup/SdkProperties');
 const CLISettings = require('./CLISettings');
 const path = require('path');
 const NodeTranslationService = require('../NodeTranslationService');
@@ -13,13 +14,7 @@ const {
 	ERRORS: { SDK_SETTINGS_FILE },
 } = require('../TranslationKeys');
 
-const BASE_PATH = process.env.NETSUITE_SDF_PATH !== undefined
-	? process.env.NETSUITE_SDF_PATH
-	: require('os').homedir();
-
 const { FILES, FOLDERS } = require('../../ApplicationConstants');
-
-const SDK_SETTINGS_FILEPATH = path.join(BASE_PATH, FOLDERS.SUITECLOUD_SDK, FILES.SDK_SETTINGS);
 
 const CLI_SETTINGS_PROPERTIES_KEYS = ['isJavaVersionValid'];
 const DEFAULT_CLI_SETTINGS = CLISettings.fromJson({
@@ -42,18 +37,26 @@ module.exports = class CLISettingsService {
 		this._fileSystemService = new FileSystemService();
 	}
 
+	_getCliSettingsFilePath() {
+		return path.join(
+			SdkProperties.getSdkBasePath(),
+			FOLDERS.SUITECLOUD_SDK,
+			FILES.SDK_SETTINGS
+		);
+	}
+
 	_saveSettings(cliSettings) {
-		this._fileSystemService.createFolder(BASE_PATH, FOLDERS.SUITECLOUD_SDK);
-		FileUtils.create(SDK_SETTINGS_FILEPATH, cliSettings);
+		this._fileSystemService.createFolder(SdkProperties.getSdkBasePath(), FOLDERS.SUITECLOUD_SDK);
+		FileUtils.create(this._getCliSettingsFilePath(), cliSettings);
 	}
 
 	_getSettings() {
 		if (CACHED_CLI_SETTINGS) {
 			return CACHED_CLI_SETTINGS;
 		}
-		if (FileUtils.exists(SDK_SETTINGS_FILEPATH)) {
+		if (FileUtils.exists(this._getCliSettingsFilePath())) {
 			try {
-				const cliSettingsJson = FileUtils.readAsJson(SDK_SETTINGS_FILEPATH);
+				const cliSettingsJson = FileUtils.readAsJson(this._getCliSettingsFilePath());
 				CACHED_CLI_SETTINGS = CLISettings.fromJson(cliSettingsJson);
 
 				// check if the settings file has the expected properties
