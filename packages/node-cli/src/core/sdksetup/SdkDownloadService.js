@@ -13,9 +13,6 @@ const http = require('http');
 const { URL } = require('url');
 const { ENCODING, EVENT, HEADER, PROTOCOL } = require('../../utils/http/HttpConstants');
 
-const BASE_PATH = process.env.NETSUITE_SDF_PATH !== undefined
-	? process.env.NETSUITE_SDF_PATH
-	: require('os').homedir();
 const { FOLDERS } = require('../../ApplicationConstants');
 
 const NodeConsoleLogger = require('../../loggers/NodeConsoleLogger');
@@ -37,7 +34,7 @@ class SdkDownloadService {
 	}
 
 	async download() {
-		const sdkParentDirectory = this._fileSystemService.createFolder(BASE_PATH, FOLDERS.SUITECLOUD_SDK);
+		const sdkParentDirectory = this._fileSystemService.createFolder(SdkProperties.getSdkBasePath(), FOLDERS.SUITECLOUD_SDK);
 		// // remove OLD jar files
 		// this._removeJarFilesFrom(sdkParentDirectory);
 		const sdkDirectory = this._fileSystemService.createFolder(sdkParentDirectory, FOLDERS.NODE_CLI);

@@ -97,7 +97,7 @@ module.exports = class FileSystemService {
 
 		try {
 			if (!existsSync(folderAbsolutePath)) {
-				mkdirSync(path.join(folderAbsolutePath));
+				mkdirSync(path.join(folderAbsolutePath), { recursive: true });
 			}
 		} catch (e) {
 			throw new CLIException(NodeTranslationService.getMessage(CANT_CREATE_FOLDER, e.path, e.code));
