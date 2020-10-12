@@ -6,22 +6,13 @@
 
 const FileSystemService = require('../FileSystemService');
 const FileUtils = require('../../utils/FileUtils');
+const SdkProperties = require('../../core/sdksetup/SdkProperties');
 const CLISettings = require('./CLISettings');
 const path = require('path');
 const NodeTranslationService = require('../NodeTranslationService');
 const { ERRORS } = require('../TranslationKeys');
 
-const BASE_PATH = process.env.NETSUITE_SDF_PATH !== undefined
-	? process.env.NETSUITE_SDF_PATH
-	: require('os').homedir();
-
 const { FILES, FOLDERS } = require('../../ApplicationConstants');
-
-const CLI_SETTINGS_FILEPATH = path.join(
-	BASE_PATH,
-	FOLDERS.SUITECLOUD_SDK,
-	FILES.CLI_SETTINGS
-);
 
 const CLI_SETTINGS_PROPERTIES_KEYS = ['proxyUrl', 'useProxy', 'isJavaVersionValid'];
 const DEFAULT_CLI_SETTINGS = new CLISettings({
@@ -37,18 +28,26 @@ module.exports = class CLISettingsService {
 		this._fileSystemService = new FileSystemService();
 	}
 
+	_getCliSettingsFilePath() {
+		return path.join(
+			SdkProperties.getSdkBasePath(),
+			FOLDERS.SUITECLOUD_SDK,
+			FILES.CLI_SETTINGS
+		);
+	}
+
 	_saveSettings(cliSettings) {
-		this._fileSystemService.createFolder(BASE_PATH, FOLDERS.SUITECLOUD_SDK);
-		FileUtils.create(CLI_SETTINGS_FILEPATH, cliSettings);
+		this._fileSystemService.createFolder(SdkProperties.getSdkBasePath(), FOLDERS.SUITECLOUD_SDK);
+		FileUtils.create(this._getCliSettingsFilePath(), cliSettings);
 	}
 
 	_getSettings() {
 		if (CACHED_CLI_SETTINGS) {
 			return CACHED_CLI_SETTINGS;
 		}
-		if (FileUtils.exists(CLI_SETTINGS_FILEPATH)) {
+		if (FileUtils.exists(this._getCliSettingsFilePath())) {
 			try {
-				const cliSettingsJson = FileUtils.readAsJson(CLI_SETTINGS_FILEPATH);
+				const cliSettingsJson = FileUtils.readAsJson(this._getCliSettingsFilePath());
 				this._validateCLISettingsProperties(cliSettingsJson);
 				CACHED_CLI_SETTINGS = CLISettings.fromJson(cliSettingsJson);
 				return CLISettings.fromJson(cliSettingsJson);
@@ -109,7 +108,7 @@ module.exports = class CLISettingsService {
 		CLI_SETTINGS_PROPERTIES_KEYS.forEach(propertyKey => {
 			if (!CLISettingsJson.hasOwnProperty(propertyKey)) {
 				throw Error(
-					`Missing ${propertyKey} property in the ${CLI_SETTINGS_FILEPATH} file.`
+					`Missing ${propertyKey} property in the ${this._getCliSettingsFilePath()} file.`
 				);
 			}
 		});
