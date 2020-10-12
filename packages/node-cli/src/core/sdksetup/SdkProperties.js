@@ -25,6 +25,12 @@ class SdkProperties {
 		return configFile.sdkDownloadUrl;
 	}
 
+	getSdkBasePath() {
+		return process.env.NETSUITE_SDF_PATH !== undefined
+			? process.env.NETSUITE_SDF_PATH
+			: require('os').homedir();
+	}
+
 	getSdkVersion() {
 		return SDK_VERSION;
 	}
@@ -44,10 +50,7 @@ class SdkProperties {
 	}
 
 	getSdkPath() {
-		const BASE_PATH = process.env.NETSUITE_SDF_PATH !== undefined
-			? process.env.NETSUITE_SDF_PATH
-			: require('os').homedir();
-		return path.join(BASE_PATH, `${FOLDERS.SUITECLOUD_SDK}/${FOLDERS.NODE_CLI}/${this.getSdkFileName()}`);
+		return path.join(this.getSdkBasePath(), `${FOLDERS.SUITECLOUD_SDK}/${FOLDERS.NODE_CLI}/${this.getSdkFileName()}`);
 	}
 }
 
