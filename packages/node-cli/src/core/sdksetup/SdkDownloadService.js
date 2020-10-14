@@ -6,7 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const request = require('request-promise-native');
+const fetch = require('node-fetch');
 const SdkProperties = require('./SdkProperties');
 
 const { FOLDERS } = require('../../ApplicationConstants');
@@ -62,20 +62,17 @@ class SdkDownloadService {
 	}
 
 	_downloadFile(url, sdkDestinationFile) {
-		const proxy = process.env.npm_config_https_proxy || process.env.npm_config_proxy;
-		const isProxyRequired = proxy && !SdkProperties.configFileExists();
+		// const proxy = process.env.npm_config_https_proxy || process.env.npm_config_proxy;
+		// const isProxyRequired = proxy && !SdkProperties.configFileExists();
 		// const removeJarFilesFrom = this._removeJarFilesFrom;
 
-		const options = {
+		return fetch(url, {
+			headers: {
+				Accept: 'binary',
+			},
 			method: 'GET',
-			uri: url,
-			encoding: 'binary',
-			resolveWithFullResponse: true,
-			...(isProxyRequired && { proxy: proxy }),
-		};
-
-		return request(options).then(function(response) {
-			if (!VALID_JAR_CONTENT_TYPES.includes(response.headers['content-type'])) {
+		}).then(function(response) {
+			if (!VALID_JAR_CONTENT_TYPES.includes(response.headers.get('content-type'))) {
 				throw NodeTranslationService.getMessage(DOWNLOADING_SUITECLOUD_SDK_ERROR_FILE_NOT_AVAILABLE);
 			}
 
@@ -83,8 +80,7 @@ class SdkDownloadService {
 			// removeJarFilesFrom(sdkDirectory)
 
 			const file = fs.createWriteStream(sdkDestinationFile);
-			file.write(response.body, 'binary');
-			file.end();
+			response.body.pipe(file);
 		});
 	}
 
