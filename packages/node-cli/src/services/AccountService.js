@@ -4,7 +4,6 @@
 */
 'use strict';
 
-const request = require('request-promise-native');
 const assert = require('assert');
 const CLISettingsService = require('./settings/CLISettingsService');
 const NodeTranslationService = require('./NodeTranslationService');
@@ -27,18 +26,18 @@ module.exports = class AccountService {
 		this._CLISettingsService = new CLISettingsService();
 	}
 
-	getAccountAndRoles({ email, password, restRolesUrl, isDevelopment }) {
-		const options = this._getRequestOptions(email, password, restRolesUrl, isDevelopment);
-
-		return new Promise(async (resolve, reject) => {
-			try {
-				const result = await request(options).promise();
-				resolve(result);
-			} catch (error) {
-				reject(this.throwRequestError(error));
-			}
-		});
-	}
+	// getAccountAndRoles({ email, password, restRolesUrl, isDevelopment }) {
+	// 	const options = this._getRequestOptions(email, password, restRolesUrl, isDevelopment);
+	//
+	// 	return new Promise(async (resolve, reject) => {
+	// 		try {
+	// 			const result = await request(options).promise();
+	// 			resolve(result);
+	// 		} catch (error) {
+	// 			reject(this.throwRequestError(error));
+	// 		}
+	// 	});
+	// }
 
 	_getRequestOptions(email, password, restRolesUrl, isDevelopment) {
 		assert(email);
