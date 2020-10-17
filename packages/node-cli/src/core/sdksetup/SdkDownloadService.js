@@ -6,7 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const fetch = require('node-fetch');
+const fetch = require('node-fetch').default;
 const SdkProperties = require('./SdkProperties');
 
 const { FOLDERS } = require('../../ApplicationConstants');
