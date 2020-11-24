@@ -28,6 +28,7 @@ const ANSWERS_NAMES = {
 	SPECIFY_OBJECT_TYPE: 'specifyObjectType',
 	TYPE_CHOICES_ARRAY: 'typeChoicesArray',
 	DESTINATION_FOLDER: 'destinationfolder',
+	MAX_ITEMS_IN_IMPORT_OBJECTS_REQUEST: 'maxItemsInImportObjectsRequest',
 	PROJECT_FOLDER: 'project',
 	OBJECTS_SELECTED: 'objects_selected',
 	OVERWRITE_OBJECTS: 'overwrite_objects',
@@ -41,8 +42,6 @@ const COMMAND_FLAGS = {
 const LIST_OBJECTS_COMMAND_NAME = 'object:list';
 const IMPORT_OBJECTS_COMMAND_TYPE_PARAM_ALL = 'ALL';
 const IMPORT_OBJECTS_COMMAND_SCRIPT_ID_PARAM_ALL = 'ALL';
-const NUMBER_OF_SCRIPTS = 8;
-const MAX_PARALLEL_EXECUTIONS = 4;
 
 module.exports = class ImportObjectsAction extends BaseAction {
 	constructor(options) {
@@ -103,10 +102,11 @@ module.exports = class ImportObjectsAction extends BaseAction {
 				successfulImports: [],
 				errorImports: [],
 			};
-			let arrayOfPromises = [];
-			const sdkParams = CommandUtils.extractCommandOptions(params, this._commandMetadata);
+			const NUMBER_OF_SCRIPTS = params[ANSWERS_NAMES.MAX_ITEMS_IN_IMPORT_OBJECTS_REQUEST] ? params[ANSWERS_NAMES.MAX_ITEMS_IN_IMPORT_OBJECTS_REQUEST] : 30;
+			this._log.info(`Using ${ANSWERS_NAMES.MAX_ITEMS_IN_IMPORT_OBJECTS_REQUEST}=${NUMBER_OF_SCRIPTS}`);
+			delete params[ANSWERS_NAMES.MAX_ITEMS_IN_IMPORT_OBJECTS_REQUEST];
 			const numberOfSdkCalls = Math.ceil(scriptIdArray.length / NUMBER_OF_SCRIPTS);
-			const numberOfSteps = Math.ceil(numberOfSdkCalls / MAX_PARALLEL_EXECUTIONS);
+			const sdkParams = CommandUtils.extractCommandOptions(params, this._commandMetadata);
 
 			for (let i = 0; i < numberOfSdkCalls; i++) {
 				const partialScriptIds = scriptIdArray.slice(i * NUMBER_OF_SCRIPTS, (i + 1) * NUMBER_OF_SCRIPTS);
@@ -119,24 +119,15 @@ module.exports = class ImportObjectsAction extends BaseAction {
 					.build();
 
 				const sdkExecutor = new SdkExecutor(this._executionEnvironmentContext);
-				arrayOfPromises.push(
-					sdkExecutor
+				this._log.info(`Importing ${params[ANSWERS_NAMES.OBJECT_TYPE]} objects: running step ${i + 1} of ${numberOfSdkCalls}...`);
+				await executeWithSpinner({
+					action: sdkExecutor
 						.execute(partialExecutionContextForImportObjects)
-						.then(this._parsePartialResult.bind({ partialScriptIds, operationResultData }))
-				);
-				if (i % MAX_PARALLEL_EXECUTIONS === (MAX_PARALLEL_EXECUTIONS - 1)) {
-					await executeWithSpinner({
-						action: Promise.all(arrayOfPromises),
-						message: NodeTranslationService.getMessage(MESSAGES.IMPORTING_OBJECTS, (i + 1) / MAX_PARALLEL_EXECUTIONS, numberOfSteps),
-					});
-					arrayOfPromises = [];
-				}
+						.then(this._parsePartialResult.bind({ partialScriptIds, operationResultData })),
+					message: NodeTranslationService.getMessage(MESSAGES.IMPORTING_OBJECTS),
+				});
 			}
 
-			await executeWithSpinner({
-				action: Promise.all(arrayOfPromises),
-				message: NodeTranslationService.getMessage(MESSAGES.IMPORTING_OBJECTS, numberOfSteps, numberOfSteps),
-			});
 			if (operationResultData.errorImports.length > 0) {
 				return ActionResult.Builder.withErrors(operationResultData.errorImports.map(data => data.reason)).build();
 			}
@@ -218,7 +209,8 @@ module.exports = class ImportObjectsAction extends BaseAction {
 		const listObjectsOperationResultData = listObjectsOperationResult.data;
 
 		if (listObjectsOperationResultData == null || (Array.isArray(listObjectsOperationResultData) && listObjectsOperationResultData.length === 0)) {
-			throw NodeTranslationService.getMessage(MESSAGES.NO_OBJECTS_IMPORTED);
+			this._log.info(NodeTranslationService.getMessage(MESSAGES.NO_OBJECTS_IMPORTED, sdkParams.type));
+			return [];
 		}
 
 		return listObjectsOperationResultData;
