@@ -302,6 +302,16 @@ module.exports = {
 				"defaultOption": false,
 				"disableInIntegrationMode": false
 			},
+			"maxItemsInImportObjectsRequest": {
+				"name": "maxItemsInImportObjectsRequest",
+				"option": "maxItemsInImportObjectsRequest",
+				"description": "Set the maximum number of scriptIds that can be in a single call.",
+				"mandatory": false,
+				"type": "SINGLE",
+				"usage": 30,
+				"defaultOption": false,
+				"disableInIntegrationMode": false
+			},
 			"type": {
 				"name": "type",
 				"option": "type",
