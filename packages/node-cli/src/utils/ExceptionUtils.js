@@ -13,7 +13,9 @@ function unwrapExceptionMessage(exception) {
 	if (exception.getErrorMessage) {
 		return exception.getErrorMessage()
 	}
-	return exception.message !== undefined ? exception.message : exception;
+	return exception.message !== undefined
+		? exception.message
+		: JSON.stringify(exception);
 }
 
 function unwrapInformationMessage(exception) {
