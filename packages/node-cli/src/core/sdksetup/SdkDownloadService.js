@@ -35,17 +35,17 @@ class SdkDownloadService {
 	}
 
 	async download() {
-		const sdkParentDirectory = this._fileSystemService.createFolder(SdkProperties.getSdkBasePath(), FOLDERS.SUITECLOUD_SDK);
-		// // remove OLD jar files
-		// this._removeJarFilesFrom(sdkParentDirectory);
-		const sdkDirectory = this._fileSystemService.createFolder(sdkParentDirectory, FOLDERS.NODE_CLI);
-
-		const sdkDestinationFile = path.join(sdkDirectory, SdkProperties.getSdkFileName());
 		const fullURL = `${SdkProperties.getDownloadURL()}/${SdkProperties.getSdkFileName()}`;
-		if (this._fileSystemService.fileExists(sdkDestinationFile)) {
-			return successDownloadResponse;
-		}
 		try {
+			const sdkParentDirectory = this._fileSystemService.createFolder(SdkProperties.getSdkBasePath(), FOLDERS.SUITECLOUD_SDK);
+			// // remove OLD jar files
+			// this._removeJarFilesFrom(sdkParentDirectory);
+			const sdkDirectory = this._fileSystemService.createFolder(sdkParentDirectory, FOLDERS.NODE_CLI);
+
+			const sdkDestinationFile = path.join(sdkDirectory, SdkProperties.getSdkFileName());
+			if (this._fileSystemService.fileExists(sdkDestinationFile)) {
+				return successDownloadResponse;
+			}
 			await executeWithSpinner({
 				action: this._downloadFile(fullURL, sdkDestinationFile),
 				message: NodeTranslationService.getMessage(DOWNLOADING_SUITECLOUD_SDK, fullURL),
