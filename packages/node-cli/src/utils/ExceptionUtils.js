@@ -10,15 +10,12 @@ const { COMMAND_OPTIONS } = require('../services/TranslationKeys');
 const ValidationErrorsFormatter = require('../utils/ValidationErrorsFormatter');
 
 function unwrapExceptionMessage(exception) {
-	const getMessage = () => {
-		if (exception.getErrorMessage) {
-			return exception.getErrorMessage();
-		}
-		return exception.message !== undefined
-			? exception.message
-			: exception;
-	};
-	return JSON.stringify(getMessage());
+	if (exception.getErrorMessage) {
+		return exception.getErrorMessage();
+	}
+	return exception.message !== undefined
+		? exception.message
+		: exception;
 }
 
 
