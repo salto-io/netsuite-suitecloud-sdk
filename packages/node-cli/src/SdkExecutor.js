@@ -35,6 +35,7 @@ const echoOffCommand = '@echo off'; // to avoid echoing the commands in the .bat
 module.exports = class SdkExecutor {
 	constructor(executionEnvironmentContext) {
 		this._sdkPath = SdkProperties.getSdkPath();
+		this._commandTimeout = SdkProperties.getCommandTimeout();
 		this._CLISettingsService = new CLISettingsService();
 		this._environmentInformationService = new EnvironmentInformationService();
 		this.childProcess = null;
@@ -57,16 +58,25 @@ module.exports = class SdkExecutor {
 			try {
 				const { childProcess, commandFile } = this._launchJvmCommand(executionContext);
 				this.childProcess = childProcess;
-				this._addChildProcessListeners(executionContext.isIntegrationMode(), commandFile, resolve, reject);
+				this._addChildProcessListeners(executionContext, commandFile, resolve, reject);
 			} catch (e) {
 				reject(e);
 			}
 		});
 	}
 
-	_addChildProcessListeners(isIntegrationMode, commandFile, resolve, reject) {
+	_addChildProcessListeners(executionContext, commandFile, resolve, reject) {
 		let lastSdkOutput = '';
 		let lastSdkError = '';
+		let isTimeout = false;
+		let timerId;
+
+		if (this._commandTimeout) {
+			timerId = setTimeout(() => {
+				isTimeout = true;
+				this.childProcess.kill();
+			}, this._commandTimeout);
+		}
 
 		this.childProcess.stderr.on(DATA_EVENT, (data) => {
 			lastSdkError += data.toString(UTF8);
@@ -76,13 +86,16 @@ module.exports = class SdkExecutor {
 		});
 
 		this.childProcess.on(CLOSE_EVENT, (code) => {
+			if (!isTimeout && timerId) {
+				clearTimeout(timerId)
+			}
 			if (commandFile) {
 				unlinkSync(commandFile)
 			}
 			if (code === 0) {
 				try {
-					const output = isIntegrationMode ? JSON.parse(lastSdkOutput) : lastSdkOutput;
-					if (isIntegrationMode && output.errorCode && output.errorCode === SdkErrorCodes.NO_TBA_SET_FOR_ACCOUNT) {
+					const output = executionContext.isIntegrationMode() ? JSON.parse(lastSdkOutput) : lastSdkOutput;
+					if (executionContext.isIntegrationMode() && output.errorCode && output.errorCode === SdkErrorCodes.NO_TBA_SET_FOR_ACCOUNT) {
 						reject(NodeTranslationService.getMessage(ERRORS.SDKEXECUTOR.NO_TBA_FOR_ACCOUNT_AND_ROLE));
 					}
 					resolve(output);
@@ -93,8 +106,11 @@ module.exports = class SdkExecutor {
 				const javaVersionError = this._checkIfJavaVersionIssue();
 				if (javaVersionError) {
 					reject(javaVersionError);
+				} else if (isTimeout) {
+					reject(`${executionContext.getCommand()} command timed out after ${this._commandTimeout} ms`);
+				} else {
+					reject(NodeTranslationService.getMessage(ERRORS.SDKEXECUTOR.SDK_ERROR, code, lastSdkError));
 				}
-				reject(NodeTranslationService.getMessage(ERRORS.SDKEXECUTOR.SDK_ERROR, code, lastSdkError));
 			}
 		});
 	}
