@@ -6,4 +6,5 @@ module.exports = {
 	NodeConsoleLogger: require('./src/loggers/NodeConsoleLogger'),
 	ActionResultUtils: require('./src/utils/ActionResultUtils'),
 	SdkDownloadService: require('./src/core/sdksetup/SdkDownloadService'),
+	SdkProperties: require('./src/core/sdksetup/SdkProperties'),
 };
