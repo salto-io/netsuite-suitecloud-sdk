@@ -15,6 +15,7 @@ let CONFIG_FILE_CACHE = null;
 
 class SdkProperties {
 	constructor() {
+		this._commandTimeout = undefined;
 		this._loadCache();
 	}
 
@@ -50,6 +51,14 @@ class SdkProperties {
 
 	getSdkPath() {
 		return path.join(this.getSdkBasePath(), `${FOLDERS.SUITECLOUD_SDK}/${FOLDERS.NODE_CLI}/${this.getSdkFileName()}`);
+	}
+
+	getCommandTimeout() {
+		return this._commandTimeout;
+	}
+
+	setCommandTimeout(commandTimeout) {
+		this._commandTimeout = commandTimeout
 	}
 }
 
