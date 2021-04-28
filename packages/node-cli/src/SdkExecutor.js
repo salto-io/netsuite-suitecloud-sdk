@@ -13,7 +13,7 @@ const {
 } = require('./ApplicationConstants');
 const path = require('path');
 const FileUtils = require('./utils/FileUtils');
-const spawn = require('child_process').spawn;
+const { exec, spawn } = require('child_process');
 const CLISettingsService = require('./services/settings/CLISettingsService');
 const EnvironmentInformationService = require('./services/EnvironmentInformationService');
 const url = require('url');
@@ -59,6 +59,16 @@ module.exports = class SdkExecutor {
 		});
 	}
 
+	// Taken from https://medium.com/@almenon214/killing-processes-with-node-772ffdd19aad
+	_killChildProcessAndItsChildren() {
+		NodeConsoleLogger.info(`About to kill childProcess.pid=${this.childProcess.pid} and all of its sub processes`);
+		if (isWin) {
+			exec(`taskkill /PID ${this.childProcess.pid} /T /F`);
+		} else {
+			process.kill(-this.childProcess.pid);
+		}
+	}
+
 	_addChildProcessListeners(executionContext, commandFile, resolve, reject) {
 		let lastSdkOutput = '';
 		let lastSdkError = '';
@@ -68,7 +78,7 @@ module.exports = class SdkExecutor {
 		if (this._commandTimeout) {
 			timerId = setTimeout(() => {
 				isTimeout = true;
-				this.childProcess.kill();
+				this._killChildProcessAndItsChildren();
 			}, this._commandTimeout);
 		}
 
@@ -141,7 +151,7 @@ module.exports = class SdkExecutor {
 			writeFileSync(command, `${echoOffCommand}\n${jvmCommand}`);
 		}
 		return {
-			childProcess: spawn(command, [], { shell: true }),
+			childProcess: spawn(command, [], { shell: true, detached: true }),
 			commandFile: useScriptCommand ? command : undefined,
 		};
 	}
