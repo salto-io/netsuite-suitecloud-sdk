@@ -65,6 +65,12 @@ module.exports = class SdkExecutor {
 		if (isWin) {
 			exec(`taskkill /PID ${this.childProcess.pid} /T /F`);
 		} else {
+			// TODO we have a risk with this solution that the child processes won't get killed even after the SIGTERM is sent.
+			//  In this case we might have to wait few seconds and then send SIGKILL.
+			//  There might be some complication around it since the parent process might die but its children not and then trying again to kill
+			//  the child_process won't kill its orphan child processes as they are not its children anymore.
+			//  Not sure that it worth to handle it now since this implementation might be enough.
+
 			process.kill(-this.childProcess.pid);
 		}
 	}
