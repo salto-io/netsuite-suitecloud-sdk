@@ -13,10 +13,11 @@ const {
 } = require('./ApplicationConstants');
 const path = require('path');
 const FileUtils = require('./utils/FileUtils');
-const spawn = require('child_process').spawn;
+const { exec, spawn } = require('child_process');
 const CLISettingsService = require('./services/settings/CLISettingsService');
 const EnvironmentInformationService = require('./services/EnvironmentInformationService');
 const url = require('url');
+const unwrapExceptionMessage = require('./utils/ExceptionUtils').unwrapExceptionMessage;
 const NodeTranslationService = require('./services/NodeTranslationService');
 const { ERRORS } = require('./services/TranslationKeys');
 const SdkErrorCodes = require('./SdkErrorCodes');
@@ -59,6 +60,27 @@ module.exports = class SdkExecutor {
 		});
 	}
 
+	// Taken from https://medium.com/@almenon214/killing-processes-with-node-772ffdd19aad
+	_killChildProcessAndItsChildren() {
+		NodeConsoleLogger.info(`About to kill childProcess.pid=${this.childProcess.pid} and all of its sub processes`);
+		try {
+			if (isWin) {
+				exec(`taskkill /PID ${this.childProcess.pid} /T /F`);
+			} else {
+				// TODO we have a risk with this solution that the child processes won't get killed even after the SIGTERM is sent.
+				//  In this case we might have to wait few seconds and then send SIGKILL.
+				//  There might be some complication around it since the parent process might die but its children not and then trying again to kill
+				//  the child_process won't kill its orphan child processes as they are not its children anymore.
+				//  Not sure that it worth to handle it now since this implementation might be enough.
+
+				process.kill(-this.childProcess.pid);
+			}
+		} catch (e) {
+			const errMsg = unwrapExceptionMessage(error);
+			NodeConsoleLogger.error(`Encountered an error when trying to kill childProcess.pid=${this.childProcess.pid} and its sub processes: ${errMsg}`);
+		}
+	}
+
 	_addChildProcessListeners(executionContext, commandFile, resolve, reject) {
 		let lastSdkOutput = '';
 		let lastSdkError = '';
@@ -68,7 +90,7 @@ module.exports = class SdkExecutor {
 		if (this._commandTimeout) {
 			timerId = setTimeout(() => {
 				isTimeout = true;
-				this.childProcess.kill();
+				this._killChildProcessAndItsChildren();
 			}, this._commandTimeout);
 		}
 
@@ -141,7 +163,7 @@ module.exports = class SdkExecutor {
 			writeFileSync(command, `${echoOffCommand}\n${jvmCommand}`);
 		}
 		return {
-			childProcess: spawn(command, [], { shell: true }),
+			childProcess: spawn(command, [], { shell: true, detached: true }),
 			commandFile: useScriptCommand ? command : undefined,
 		};
 	}
