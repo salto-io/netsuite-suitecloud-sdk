@@ -7,4 +7,5 @@ module.exports = {
 	ActionResultUtils: require('./src/utils/ActionResultUtils'),
 	SdkDownloadService: require('./src/core/sdksetup/SdkDownloadService'),
 	SdkProperties: require('./src/core/sdksetup/SdkProperties'),
+	SDK_VERSION: require('./src/ApplicationConstants').SDK_VERSION,
 };
