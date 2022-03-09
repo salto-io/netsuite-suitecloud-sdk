@@ -560,6 +560,45 @@ module.exports = {
 			}
 		}
 	},
+	"configuration:import": {
+		"name": "configuration:import",
+		"sdkCommand": "importconfiguration",
+		"usage": "",
+		"description": "Imports configurations from your NetSuite account to the SDF project.",
+		"isSetupRequired": true,
+		"options": {
+			"authid": {
+				"name": "authid",
+				"option": "authid",
+				"description": "References the custom alias you gave to a specific account-role combination.",
+				"mandatory": true,
+				"type": "SINGLE",
+				"usage": "",
+				"defaultOption": false,
+				"disableInIntegrationMode": true
+			},
+			"project": {
+				"name": "project",
+				"option": "project",
+				"description": "Specify the path of your project folder.",
+				"mandatory": true,
+				"type": "SINGLE",
+				"usage": "c:/project/",
+				"defaultOption": false,
+				"disableInIntegrationMode": true
+			},
+			"configurationid": {
+				"name": "configurationid",
+				"option": "configurationid",
+				"description": "Specifies the configuration to import. This value should be set to FEATURES:ALL_FEATURES. You can only import the configuration for all features.",
+				"mandatory": true,
+				"type": "SINGLE",
+				"usage": "",
+				"defaultOption": false,
+				"disableInIntegrationMode": true
+			}
+		}
+	},
 	"account:manageauth": {
 		"name": "account:manageauth",
 		"sdkCommand": "manageauth",
