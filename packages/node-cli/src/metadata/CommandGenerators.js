@@ -50,6 +50,11 @@ module.exports = [
         "generator": require('../commands/object/update/UpdateCommand')
     },
     {
+        "commandName": "configuration:import",
+        "supportsInteractiveMode": false,
+        "generator": require('../commands/configuration/import/ImportConfigurationCommand')
+    },
+    {
         "commandName": "project:adddependencies",
         "supportsInteractiveMode": false,
         "generator": require('../commands/project/adddependencies/AddDependenciesCommand')

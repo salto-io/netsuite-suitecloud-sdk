@@ -141,7 +141,9 @@
 	"COMMAND_LISTOBJECTS_SUCCESS_OBJECTS_IMPORTED": "The following objects were found in your account:",
 	"COMMAND_LISTOBJECTS_SUCCESS_NO_OBJECTS": "There are no objects matching your search criteria. Select a different set of object types, and if applicable, check the specified application ID and script ID.",
 
-	"COMMAND_MANAGE_ACCOUNT_ERROR_CREDENTIALS_EMPTY": "There is no authentication ID (a custom alias you give to a specific account-role combination) configured for this account-role combination. Run \"suitecloud account:setup\" to set up a NetSuite account to use with SuiteCloud CLI for Node.js.",
+    "COMMAND_IMPORTCONFIGURATION_PROGRESS": "Importing configuration from account...",
+
+    "COMMAND_MANAGE_ACCOUNT_ERROR_CREDENTIALS_EMPTY": "There is no authentication ID (a custom alias you give to a specific account-role combination) configured for this account-role combination. Run \"suitecloud account:setup\" to set up a NetSuite account to use with SuiteCloud CLI for Node.js.",
 	"COMMAND_MANAGE_ACCOUNT_ERROR_CREDENTIALS_NOT_FOUND": "The \"{0}\" authentication ID is not available. Check your authentication credentials and try again.",
 	"COMMAND_MANAGE_ACCOUNT_ERROR_OPTION_NOT_SPECIFIED": "You have not specified any option. Run \"suitecloud account:manageauth --help\" to check which options are available.",
 	"COMMAND_MANAGE_ACCOUNT_MESSAGES_ACCOUNT_INFO_ACCOUNT_ID": "Account ID: {0}",
