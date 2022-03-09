@@ -1,6 +1,6 @@
 {
 	"name": "@salto-io/suitecloud-cli",
-	"version": "1.3.2-salto-1",
+	"version": "1.3.2-salto-2",
 	"license": "UPL-1.0",
 	"description": "SuiteCloud CLI for Node.js",
 	"keywords": [
