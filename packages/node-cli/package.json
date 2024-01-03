@@ -19,7 +19,8 @@
 	"repository": "https://github.com/salto-io/netsuite-suitecloud-sdk/tree/master/packages/node-cli",
 	"main": "./index.js",
 	"preferGlobal": true,
-	"sdkDownloadUrl": "https://system.netsuite.com/download/suitecloud-sdk/23.2",
+    "nsCompatibleVersion": "2023.2",
+    "sdkDownloadUrl": "https://system.netsuite.com/download/suitecloud-sdk/23.2",
 	"bin": {
 		"suitecloud": "./src/suitecloud.js"
 	},
