@@ -4,7 +4,7 @@
  */
 'use strict';
 
-const SDK_VERSION = '2023.1.0';
+const SDK_VERSION = '2023.2.0';
 
 module.exports = {
 	AUTHORIZATION_PROPERTIES_KEYS: {
@@ -16,7 +16,6 @@ module.exports = {
 	NODE_COMMANDS_METADATA_FILE: 'metadata/NodeCommandsMetadata.json',
 	COMMAND_GENERATORS_METADATA_FILE: 'metadata/CommandGenerators.js',
 	SDK_VERSION,
-	COMPATIBLE_NS_VERSION: '2023.1',
 	SDK_FILENAME: `cli-${SDK_VERSION}.jar`,
 	SDK_REQUIRED_JAVA_VERSION: '17',
 	SDK_INTEGRATION_MODE_JVM_OPTION: '-DintegrationMode --add-opens java.base/java.io=ALL-UNNAMED',
