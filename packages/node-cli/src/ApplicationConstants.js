@@ -4,7 +4,7 @@
  */
 'use strict';
 
-const SDK_VERSION = '2023.2.0';
+const SDK_VERSION = '2024.1.0';
 
 module.exports = {
 	SDK_COMMANDS_METADATA_FILE: 'metadata/SdkCommandsMetadata.json',
