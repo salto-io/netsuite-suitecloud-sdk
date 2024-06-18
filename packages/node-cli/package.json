@@ -18,9 +18,9 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/oracle/netsuite-suitecloud-sdk.git#master"
+		"url": "git+https://github.com/salto-io/netsuite-suitecloud-sdk.git#master"
 	},
-	"main": "./src/suitecloud.js",
+	"main": "./index.js",
 	"preferGlobal": true,
 	"sdkFilename": "cli-2025.1.0.jar",
 	"nsCompatibleVersion": "2025.2",
