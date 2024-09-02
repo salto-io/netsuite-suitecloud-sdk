@@ -29,7 +29,7 @@
 		"suitecloud": "src/suitecloud.js"
 	},
 	"dependencies": {
-        "@salto-io/logging": "<0.4.0",
+        "@salto-io/logging": "latest",
         "chalk": "5.4.1",
 		"cli-spinner": "0.2.10",
 		"commander": "11.1.0",
