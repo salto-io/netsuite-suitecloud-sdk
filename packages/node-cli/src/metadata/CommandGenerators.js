@@ -1,10 +1,5 @@
 module.exports = [
     {
-        "commandName": "account:savetoken",
-        "supportsInteractiveMode": false,
-        "generator": require('../commands/account/savetoken/AccountSaveTokenCommand')
-    },
-    {
         "commandName": "account:manageauth",
         "supportsInteractiveMode": true,
         "generator": require('../commands/account/manageauth/ManageAccountCommand')
@@ -13,6 +8,11 @@ module.exports = [
         "commandName": "account:setup",
         "supportsInteractiveMode": true,
         "generator": require('../commands/account/setup/SetupCommand')
+    },
+    {
+        "commandName": "account:setup:ci",
+        "supportsInteractiveMode": true,
+        "generator": require('../commands/account/setupci/AccountSetupCiCommand')
     },
 	{
 		"commandName": "file:create",

@@ -25,7 +25,7 @@ module.exports = {
 		const spinner = new Spinner(message);
 		// TODO: set spinner string conditionally based on the terminal cli is executed in
 		// spinner.setSpinnerString(SPINNER_STRING);
-		const showSpinner = verbose || context.verbose;
+		const showSpinner = (verbose || context.verbose) && process.env.NETSUITE_SDF_PATH == null;
 		try {
 			if (showSpinner) {
 				spinner.start();
