@@ -1,6 +1,6 @@
 {
-	"name": "@oracle/suitecloud-cli",
-	"version": "2.0.0",
+	"name": "@salto-io/suitecloud-cli",
+	"version": "1.9.0-salto-4",
 	"license": "UPL-1.0",
 	"description": "SuiteCloud CLI for Node.js",
 	"keywords": [
@@ -18,9 +18,9 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/oracle/netsuite-suitecloud-sdk.git#master"
+		"url": "git+https://github.com/salto-io/netsuite-suitecloud-sdk.git#master"
 	},
-	"main": "./src/suitecloud.js",
+	"main": "./index.js",
 	"preferGlobal": true,
 	"sdkFilename": "cli-2024.2.0.jar",
 	"nsCompatibleVersion": "2024.2",
@@ -29,9 +29,10 @@
 		"suitecloud": "src/suitecloud.js"
 	},
 	"dependencies": {
+		"@salto-io/logging": "latest",
 		"chalk": "4.1.2",
 		"cli-spinner": "0.2.10",
-		"commander": "11.1.0",
+		"commander": "10.0.0",
 		"inquirer": "8.2.6",
 		"xml2js": "0.6.2"
 	},
@@ -39,7 +40,6 @@
 		"jest": "29.7.0"
 	},
 	"scripts": {
-		"test": "jest",
-		"postinstall": "node postinstall.js"
+		"test": "jest"
 	}
 }

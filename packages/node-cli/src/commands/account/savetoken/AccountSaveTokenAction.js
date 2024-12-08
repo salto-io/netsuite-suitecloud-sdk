@@ -75,7 +75,7 @@ module.exports = class AccountSaveTokenAction extends BaseAction {
 		if (params[COMMAND.OPTIONS.URL] === GENERIC_NETSUITE_DOMAIN) {
 			delete params[COMMAND.OPTIONS.URL];
 		}
-		return await saveToken(params, this._sdkPath, this._executionPath, this._executionEnvironmentContext);
+		return await saveToken(params, this._executionPath, this._executionEnvironmentContext);
 
 	}
 

@@ -55,6 +55,11 @@
 		"generator": "./commands/object/update/UpdateCommand"
 	},
 	{
+		"commandName": "configuration:import",
+		"supportsInteractiveMode": false,
+		"generator": "commands/configuration/import/ImportConfigurationCommand"
+	},
+	{
 		"commandName": "project:adddependencies",
 		"supportsInteractiveMode": false,
 		"generator": "commands/project/adddependencies/AddDependenciesCommand"

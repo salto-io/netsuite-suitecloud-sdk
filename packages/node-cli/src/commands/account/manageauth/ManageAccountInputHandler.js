@@ -56,7 +56,7 @@ module.exports = class ManageAccountInputHandler extends BaseInputHandler {
 			return params;
 		}
 		let answers;
-		const authIDActionResult = await getAuthIds(this._sdkPath);
+		const authIDActionResult = await getAuthIds();
 		if (!authIDActionResult.isSuccess()) {
 			throw authIDActionResult.errorMessages;
 		}

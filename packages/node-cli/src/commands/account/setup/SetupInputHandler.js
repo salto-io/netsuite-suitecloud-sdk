@@ -51,14 +51,14 @@ module.exports = class SetupInputHandler extends BaseInputHandler {
 	constructor(options) {
 		super(options);
 		// TODO input handlers shouldn't execute actions. rework this
-		this._sdkExecutor = new SdkExecutor(this._sdkPath);
+		this._sdkExecutor = new SdkExecutor();
 		this._projectInfoService = new ProjectInfoService(this._projectFolder);
 	}
 
 	async getParameters(params) {
 		this._projectInfoService.checkWorkingDirectoryContainsValidProject(this._commandMetadata.name);
 
-		const authIDActionResult = await getAuthIds(this._sdkPath);
+		const authIDActionResult = await getAuthIds();
 		if (!authIDActionResult.isSuccess()) {
 			throw authIDActionResult.errorMessages;
 		}
