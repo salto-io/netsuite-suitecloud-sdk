@@ -115,7 +115,7 @@ module.exports = class ProjectInfoService {
 			if (err) {
 				const errorMessage = NodeTranslationService.getMessage(ERRORS.PROCESS_FAILED) +
 					' ' +
-					NodeTranslationService.getMessage(ERRORS.FILE, manifestPath);
+					NodeTranslationService.getMessage(ERRORS.FILE, FILES.MANIFEST_XML);
 				validationError = errorMessage + ' ' + err;
 			}
 
