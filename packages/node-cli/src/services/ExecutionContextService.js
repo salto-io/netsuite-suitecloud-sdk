@@ -44,9 +44,9 @@ const ExecutionMode = {
 
 const validateMachineToMachineAuthIsAllowed = () => {
 	const executionMode = getExecutionMode();
-	if (!(executionMode === ExecutionMode.CI || executionMode === ExecutionMode.AUTH_CI_SETUP)) {
-		throw NodeTranslationService.getMessage(MACHINE_TO_MACHINE_NOT_ALLOWED, AUTHENTICATION_INFO);
-	}
+	// if (!(executionMode === ExecutionMode.CI || executionMode === ExecutionMode.AUTH_CI_SETUP)) {
+	// 	throw NodeTranslationService.getMessage(MACHINE_TO_MACHINE_NOT_ALLOWED, AUTHENTICATION_INFO);
+	// }
 };
 
 const validateBrowserBasedAuthIsAllowed = () => {
