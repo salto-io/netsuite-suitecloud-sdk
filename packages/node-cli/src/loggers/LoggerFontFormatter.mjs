@@ -6,7 +6,7 @@
 
 const chalk = require('chalk');
 
-export const COLORS = {
+const COLORS = {
 	DEFAULT: chalk.white,
 	RESULT: chalk.green,
 	ERROR: chalk.red,
@@ -14,4 +14,7 @@ export const COLORS = {
 	WARNING: chalk.yellow,
 };
 
-export const BOLD = chalk.bold;
+module.exports = {
+	BOLD: chalk.bold,
+	COLORS,
+};
