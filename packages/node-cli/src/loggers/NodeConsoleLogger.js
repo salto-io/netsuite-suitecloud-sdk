@@ -8,7 +8,7 @@ const { logger } = require('@salto-io/logging');
 const ConsoleLogger = require('./ConsoleLogger');
 
 const loadLoggerFontFormatter = async () => {
-	const { COLORS, BOLD } = await import('./LoggerFontFormatter.mjs');
+	const { COLORS, BOLD } = require('./LoggerFontFormatter.mjs');
 	return { COLORS, BOLD };
 };
 const fontFormatterPromise = loadLoggerFontFormatter();

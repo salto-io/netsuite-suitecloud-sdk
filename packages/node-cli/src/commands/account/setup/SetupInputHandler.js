@@ -5,7 +5,7 @@
 'use strict';
 
 const loadLoggerFontFormatter = async () => {
-	const { COLORS, BOLD } = await import('../../../loggers/LoggerFontFormatter.mjs');
+	const { COLORS, BOLD } = require('../../../loggers/LoggerFontFormatter.mjs');
 	return { COLORS, BOLD };
 };
 const fontFormatterPromise = loadLoggerFontFormatter();
