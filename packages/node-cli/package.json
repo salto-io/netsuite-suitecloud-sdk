@@ -1,6 +1,6 @@
 {
 	"name": "@salto-io/suitecloud-cli",
-	"version": "3.0.2-salto-4",
+	"version": "3.0.2-salto-5",
 	"license": "UPL-1.0",
 	"description": "SuiteCloud CLI for Node.js",
 	"keywords": [
@@ -30,7 +30,7 @@
 	},
 	"dependencies": {
 		"@salto-io/logging": "latest",
-		"chalk": "5.4.1",
+		"chalk": "4.1.2",
 		"cli-spinner": "0.2.10",
 		"commander": "11.1.0",
 		"inquirer": "12.6.3",
