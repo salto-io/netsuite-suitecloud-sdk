@@ -4,11 +4,7 @@
  */
 'use strict';
 
-const loadLoggerFontFormatter = async () => {
-	const { COLORS, BOLD } = require('../../../loggers/LoggerFontFormatter.mjs');
-	return { COLORS, BOLD };
-};
-const fontFormatterPromise = loadLoggerFontFormatter();
+const chalk = require('chalk');
 const { default : { prompt, Separator } } = require('inquirer');
 const BaseInputHandler = require('../../base/BaseInputHandler');
 const CommandUtils = require('../../../utils/CommandUtils');
@@ -81,7 +77,7 @@ module.exports = class SetupInputHandler extends BaseInputHandler {
 		let authIDs = Object.keys(authIDActionResult.data);
 		if (authIDs.length > 0) {
 		choices.push({
-				name: (await fontFormatterPromise).BOLD(NodeTranslationService.getMessage(QUESTIONS_CHOICES.SELECT_AUTHID.NEW_AUTH_ID)),
+				name: chalk.BOLD(NodeTranslationService.getMessage(QUESTIONS_CHOICES.SELECT_AUTHID.NEW_AUTH_ID)),
 				value: CREATE_NEW_AUTH,
 			});
 			choices.push(new Separator());

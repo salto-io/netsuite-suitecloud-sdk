@@ -4,17 +4,14 @@
  */
 'use strict';
 
-const chalk = require('chalk');
-
-const COLORS = {
-	DEFAULT: chalk.white,
-	RESULT: chalk.green,
-	ERROR: chalk.red,
-	INFO: chalk.cyan,
-	WARNING: chalk.yellow,
-};
-
-module.exports = {
-	BOLD: chalk.bold,
-	COLORS,
-};
+// import chalk from 'chalk';
+//
+// export const COLORS = {
+// 	DEFAULT: chalk.white,
+// 	RESULT: chalk.green,
+// 	ERROR: chalk.red,
+// 	INFO: chalk.cyan,
+// 	WARNING: chalk.yellow,
+// };
+//
+// export const BOLD = chalk.bold;
