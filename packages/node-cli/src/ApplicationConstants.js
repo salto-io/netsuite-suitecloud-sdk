@@ -4,7 +4,7 @@
  */
 'use strict';
 
-const SDK_VERSION = '2024.2.0';
+const SDK_VERSION = '2025.1.0';
 
 module.exports = {
 	AUTHORIZATION_PROPERTIES_KEYS: {
