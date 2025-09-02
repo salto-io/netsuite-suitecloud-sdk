@@ -20,7 +20,6 @@ module.exports = class ListObjectsOutputHandler extends BaseOutputHandler {
 		ActionResultUtils.logResultMessage(actionResult, this._log);
 		if (Array.isArray(actionResult.data) && actionResult.data.length) {
 			this._log.result(NodeTranslationService.getMessage(SUCCESS_OBJECTS_IMPORTED));
-			actionResult.data.forEach((object) => this._log.result(`${object.type}:${object.scriptId}`));
 		} else {
 			this._log.result(NodeTranslationService.getMessage(SUCCESS_NO_OBJECTS));
 		}
