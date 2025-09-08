@@ -166,7 +166,7 @@ module.exports = class SdkExecutor {
 			writeFileSync(command, `${echoOffCommand}\n${jvmCommand}`);
 		}
 		return {
-			childProcess: spawn(command, [], { shell: true, detached: true }),
+			childProcess: spawn(command, [], { shell: true, detached: true, env: process.env }),
 			commandFile: useScriptCommand ? command : undefined,
 		};
 	}
